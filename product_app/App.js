@@ -1,4 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
+import { useState } from 'react';
 import { StyleSheet, View, ScrollView} from 'react-native';
 import Header from './components/Header';
 import Footer from './components/Footer';
