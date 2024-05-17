@@ -1,11 +1,14 @@
-import { useState } from 'react';
-import { StyleSheet, View, TextInput, Text, Pressable, FlatList, Image, ScrollView } from 'react-native';
+import { useState, useRef } from 'react';
+import { StyleSheet, View, TextInput, Text, Pressable, FlatList, Image, ImageBackground } from 'react-native';
 
 export default function FormAddProduct() {  
     const [products, setProduct] = useState([]);
 
     const [productTitle, setProductTitle] = useState('');
     const [productWeight, setProductWeight] = useState('');
+
+    const product_title_input = useRef(null);
+    const product_weight_input = useRef(null);
     
     const addProductTitle = (productTitle) => {
         setProductTitle(productTitle);
@@ -16,6 +19,9 @@ export default function FormAddProduct() {
     }
 
     const addProductHandler = (productTitle) => {
+        product_title_input.current.clear();
+        product_weight_input.current.clear();
+
         setProduct((list) => {
             return [
                 {
@@ -33,22 +39,29 @@ export default function FormAddProduct() {
             return list.filter(products => products.key != key);
         });
     }
+
+    const findRecipe = () => {
+        
+    }
      
     return (
         <View style={styles.form_add_product_container}>
             <View style={styles.form_add_product}>
                 <Text style={styles.form_add_product_head_text}>
-                    Для получения список рецептов, укажите продукты, которые есть у вас
+                    Для получения списка рецептов, укажите продукты, которые у вас есть
                 </Text>
                 <View style={styles.form_add_product_fields_container}>
                     <TextInput 
                         style={styles.form_add_product_title_input} 
+                        ref={product_title_input}
                         onChangeText={addProductTitle}
                         placeholder='Например "Сыр"...' 
                     />
                     <TextInput 
                         style={styles.form_add_product_weight_input} 
+                        ref={product_weight_input}
                         onChangeText={addProductWeight}
+                        keyboardType={'numeric'}
                         placeholder='Вес (грамм)' 
                     />
                 </View>
@@ -60,6 +73,9 @@ export default function FormAddProduct() {
                 </Pressable>
             </View>
             <View style={styles.list_products_container}>
+                {products.length == 0 && (
+                    <ImageBackground source={require('./../assets/fridge-image.png')} resizeMode="contain" style={styles.list_products_fridge_image}/>
+                )}
                 <FlatList 
                     style={styles.list_products}
                     data={products} renderItem={({item}) => (
@@ -81,7 +97,7 @@ export default function FormAddProduct() {
             <View style={styles.find_recipe_container}>
                 <Pressable 
                     style={styles.btn_find_recipe}
-                    onPress={() => addProductHandler(productTitle)}
+                    onPress={() => findRecipe()}
                 >
                     <Text style={styles.btn_find_recipe_text}>Подобрать рецепт</Text>
                 </Pressable>
@@ -148,9 +164,15 @@ const styles = StyleSheet.create({
     },
     list_products_container: {
         marginVertical: 14,
-        flex: 1
+        flex: 1,
+    },
+    list_products_fridge_image: {
+        display: 'flex',
+        height: '100%'
     },
     list_products: {
+        display: 'flex',
+        flexDirection: 'column',
         overflow: 'scroll'
     },
     list_products_item: {
