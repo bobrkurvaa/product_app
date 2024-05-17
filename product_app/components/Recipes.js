@@ -1,12 +1,11 @@
-import { StyleSheet, View} from 'react-native';
-import Header from './Header';
-import Footer from './Footer';
+import { FlatList, StyleSheet, View, Text} from 'react-native';
 
-export default function Recipes() {
+export default function Recipes({ route }) {
     return (
       <View style={styles.container}>
-        <Header />
-        <Footer />
+        <FlatList data={route.params.products} renderItem={({ item }) => (
+          <Text>{item.title}</Text>
+        )} />
       </View>
     );
   }

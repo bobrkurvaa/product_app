@@ -3,11 +3,11 @@ import Header from './Header';
 import Footer from './Footer';
 import FormAddProduct from './FormAddProduct';
 
-export default function Home() {
+export default function Home({ navigation }) {
     return (
       <View style={styles.container}>
         <View style={styles.content_container}>
-          <FormAddProduct />
+          <FormAddProduct navigation={navigation}/>
         </View>
       </View>
     );

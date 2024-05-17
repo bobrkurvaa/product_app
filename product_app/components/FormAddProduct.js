@@ -1,7 +1,7 @@
 import { useState, useRef } from 'react';
 import { StyleSheet, View, TextInput, Text, Pressable, FlatList, Image, ImageBackground } from 'react-native';
 
-export default function FormAddProduct() {  
+export default function FormAddProduct({ navigation }) {  
     const [products, setProduct] = useState([]);
 
     const [productTitle, setProductTitle] = useState('');
@@ -41,7 +41,7 @@ export default function FormAddProduct() {
     }
 
     const findRecipe = () => {
-        
+        navigation.navigate('Recipes', {products: products});
     }
      
     return (
@@ -95,15 +95,16 @@ export default function FormAddProduct() {
                 )}/>
             </View>
             <View style={styles.find_recipe_container}>
-                <Pressable 
-                    style={styles.btn_find_recipe}
-                    onPress={() => findRecipe()}
-                >
-                    <Text style={styles.btn_find_recipe_text}>Подобрать рецепт</Text>
-                </Pressable>
+                {products.length > 0 && (
+                    <Pressable 
+                        style={styles.btn_find_recipe}
+                        onPress={findRecipe}
+                    >
+                        <Text style={styles.btn_find_recipe_text}>Подобрать рецепт</Text>
+                    </Pressable>
+                )}
             </View>
         </View>
-        
     );
 }
 
@@ -136,6 +137,7 @@ const styles = StyleSheet.create({
         width: '59%',
         paddingHorizontal: 16,
         paddingVertical: 14,
+        backgroundColor: '#FFFFFF',
         borderWidth: 1,
         borderRadius: 18,
         borderColor: '#FCBA26',
@@ -145,6 +147,7 @@ const styles = StyleSheet.create({
         width: '39%',
         paddingHorizontal: 16,
         paddingVertical: 14,
+        backgroundColor: '#FFFFFF',
         borderWidth: 1,
         borderRadius: 18,
         borderColor: '#FCBA26',

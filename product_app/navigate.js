@@ -1,17 +1,19 @@
-import React, { useState } from "react";
+import React from "react";
 import Home from "./components/Home";
 import Whishlist from "./components/Whishlist";
 import Profile from "./components/Profile";
+import Recipes from "./components/Recipes";
 import { NavigationContainer } from '@react-navigation/native';
-import { BottomTabBar, createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { StyleSheet, Text, Image, SafeAreaView } from 'react-native';
+import { StyleSheet, Image, View } from 'react-native';
 
 const Tab = createBottomTabNavigator();
-const Stack = createBottomTabNavigator();
+const Stack = createNativeStackNavigator();
 
 const setScreenOptions = (route) => {
     return {
+        headerShown: false,
         tabBarStyle:{
             position: 'absolute',
             backgroundColor:'#6DE5B5',
@@ -27,7 +29,7 @@ const setScreenOptions = (route) => {
         },
         tabBarIcon: () => {   
             switch (route.name) {
-                case 'Главная':
+                case 'Home':
                     return (
                         <Image 
                             style={styles.btn_image}
@@ -58,11 +60,39 @@ export default function Navigate() {
         <NavigationContainer>
             <Tab.Navigator
                 screenOptions={({route}) => setScreenOptions(route)}
+                initialRouteName="Home"
             >
                 <Tab.Screen 
-                    name="Главная" 
-                    component={Home} 
-                />
+                    name="Home" 
+                    options={
+                        {
+                            title: 'Главная',
+                        }
+                    }
+                >
+                    {() => (
+                        <Stack.Navigator>
+                            <Stack.Screen 
+                                name="HomeStack" 
+                                component={Home}
+                                options={
+                                    {
+                                        title: 'Главная',
+                                    }
+                                }
+                            />
+                            <Stack.Screen 
+                                name="Recipes" 
+                                component={Recipes} 
+                                options={
+                                    {
+                                        title: 'Рецепты',
+                                    }
+                                }
+                            />
+                        </Stack.Navigator>
+                    )}
+                </Tab.Screen>
                 <Tab.Screen 
                     name="Избранное" 
                     component={Whishlist} 

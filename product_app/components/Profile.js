@@ -5,8 +5,6 @@ import Footer from './Footer';
 export default function Profile() {
     return (
       <View>
-        <Header />
-        <Footer />
       </View>
     );
 }
