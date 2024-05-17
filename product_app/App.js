@@ -25,7 +25,9 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between'
   },
   content_container: {
-    marginTop: 18,
+    height: '86%',
+    maxHeight: '86%',
+    paddingTop: 18,
     paddingHorizontal: '6%'
   }
 });

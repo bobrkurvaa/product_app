@@ -1,24 +1,37 @@
 import { useState } from 'react';
-import { StyleSheet, View, TextInput, Text, Pressable, FlatList } from 'react-native';
+import { StyleSheet, View, TextInput, Text, Pressable, FlatList, Image } from 'react-native';
 
 export default function FormAddProduct() {  
-    const [products, addProduct] = useState([
-        {title: 'Продукт 1', index: 1}
-    ]);
-    
-    const addProductHandler = (productTitle) => {
-        addProduct((list) => {
-            return [
-                {title: productTitle},
-                ...list
-            ]        
-        });
-    };
+    const [products, setProduct] = useState([]);
 
     const [productTitle, setProductTitle] = useState('');
+    const [productWeight, setProductWeight] = useState('');
     
     const addProductTitle = (productTitle) => {
         setProductTitle(productTitle);
+    }
+
+    const addProductWeight = (productWeight) => {
+        setProductWeight(productWeight);
+    }
+
+    const addProductHandler = (productTitle) => {
+        setProduct((list) => {
+            return [
+                {
+                    key: 'product_' + new Date().getTime(),
+                    title: productTitle,
+                    weight: productWeight
+                },
+                ...list
+            ];       
+        });
+    };
+
+    const removeProductHandler = (key) => {
+        setProduct((list) => {
+            return list.filter(products => products.key != key);
+        });
     }
      
     return (
@@ -27,16 +40,23 @@ export default function FormAddProduct() {
                 <Text style={styles.form_add_product_head_text}>
                     Для получения список рецептов, укажите продукты, которые есть у вас
                 </Text>
-                <TextInput 
-                    style={styles.form_add_product_input} 
-                    onChangeText={addProductTitle}
-                    placeholder='Например "Сыр"...' 
-                />
+                <View style={styles.form_add_product_fields_container}>
+                    <TextInput 
+                        style={styles.form_add_product_title_input} 
+                        onChangeText={addProductTitle}
+                        placeholder='Например "Сыр"...' 
+                    />
+                    <TextInput 
+                        style={styles.form_add_product_weight_input} 
+                        onChangeText={addProductWeight}
+                        placeholder='Вес (грамм)' 
+                    />
+                </View>
                 <Pressable 
                     style={styles.form_add_product_btn}
                     onPress={() => addProductHandler(productTitle)}
                 >
-                    <Text style={styles.form_add_product_btn_text}>+ Добавить продукт</Text>
+                    <Text style={styles.form_add_product_btn_text}>Добавить продукт</Text>
                 </Pressable>
             </View>
             <View style={styles.list_products_container}>
@@ -44,9 +64,27 @@ export default function FormAddProduct() {
                     style={styles.list_products}
                     data={products} renderItem={({item}) => (
                     <View style={styles.list_products_item}>
-                        <Text style={styles.list_products_item_text}>{item.title}</Text>
+                        <Text style={styles.list_products_item_title}>{item.title}</Text>
+                        <Text style={styles.list_products_item_weight}>{item.weight} гр.</Text>
+                        <Pressable 
+                            style={styles.remove_product_btn} 
+                            onPress={()=>removeProductHandler(item.key)}
+                        >
+                            <Image 
+                                style={styles.remove_product_btn_image}
+                                source={require('./../assets/remove_btn-icon.png')}
+                            />
+                        </Pressable>
                     </View>
                 )}/>
+            </View>
+            <View style={styles.find_recipe_container}>
+                <Pressable 
+                    style={styles.btn_find_recipe}
+                    onPress={() => addProductHandler(productTitle)}
+                >
+                    <Text style={styles.btn_find_recipe_text}>Подобрать рецепт</Text>
+                </Pressable>
             </View>
         </View>
         
@@ -70,7 +108,22 @@ const styles = StyleSheet.create({
         fontWeight: '500',
         textAlign: 'center'
     },
-    form_add_product_input: {
+    form_add_product_fields_container: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between'
+    },
+    form_add_product_title_input: {
+        width: '59%',
+        paddingHorizontal: 16,
+        paddingVertical: 14,
+        borderWidth: 1,
+        borderRadius: 18,
+        borderColor: '#FCBA26',
+        fontSize: 16
+    },
+    form_add_product_weight_input: {
+        width: '39%',
         paddingHorizontal: 16,
         paddingVertical: 14,
         borderWidth: 1,
@@ -81,30 +134,67 @@ const styles = StyleSheet.create({
     form_add_product_btn: {
         display: 'flex',
         alignItems: 'center',
-        borderRadius: '50%',
+        borderRadius: 50,
         backgroundColor: '#FCBA26',
         paddingVertical: 16,
     },
     form_add_product_btn_text: {
-        color: '#151515',
-        fontSize: 16
+        color: '#ffffff',
+        fontSize: 18,
+        fontWeight: '500',
     },
     list_products_container: {
-        marginTop: 18
+        marginVertical: 14
     },
     list_products: {
+        maxHeight: 'calc(100% - 250px)',
         overflow: 'scroll'
     },
     list_products_item: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        verticalAlign: 'middle',
         marginVertical: 4,
         paddingHorizontal: 16,
-        paddingVertical: 36,
-        backgroundColor: '#6DE5B5',
+        paddingVertical: 24,
+        borderColor: '#6DE5B5',
+        borderWidth: 2,
         borderRadius: 18,
     },
-    list_products_item_text: {
-        fontSize: 20,
+    list_products_item_title: {
+        width: '60%',
+        marginRight: '1%',
+        textAlign: 'left',
+        fontSize: 22,
         fontWeight: '500',
-        textAlign: 'center'
-    }
+        color: '#151515',
+    },
+    list_products_item_weight: {
+        marginRight: '1%',
+        fontSize: 20,
+        fontWeight: '400',
+        textAlign: 'left'
+    },
+    remove_product_btn: {
+        width: 32,
+        height: 32,
+    },
+    remove_product_btn_image: {
+        width: 28,
+        height: 28,
+    },
+    find_recipe_container: {},
+    btn_find_recipe: {
+        display: 'flex',
+        alignItems: 'center',
+        borderRadius: 50,
+        backgroundColor: '#6DE5B5',
+        paddingVertical: 18,
+    },
+    btn_find_recipe_text: {
+        color: '#151515',
+        fontSize: 18,
+        fontWeight: '500',
+    },
 })
