@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { StyleSheet, View, TextInput, Text, Pressable, FlatList, Image } from 'react-native';
+import { StyleSheet, View, TextInput, Text, Pressable, FlatList, Image, ScrollView } from 'react-native';
 
 export default function FormAddProduct() {  
     const [products, setProduct] = useState([]);
@@ -93,13 +93,16 @@ export default function FormAddProduct() {
 
 const styles = StyleSheet.create({
     form_add_product_container: {
-
+        display: 'flex',
+        flexDirection: 'column',
+        height: '100%'
+        
     },
     form_add_product: {
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-between',
-        height: 182
+        height: 182,
     },
     form_add_product_head_text: {
         color: '#151515',
@@ -144,10 +147,10 @@ const styles = StyleSheet.create({
         fontWeight: '500',
     },
     list_products_container: {
-        marginVertical: 14
+        marginVertical: 14,
+        flex: 1
     },
     list_products: {
-        maxHeight: 'calc(100% - 250px)',
         overflow: 'scroll'
     },
     list_products_item: {
@@ -184,7 +187,11 @@ const styles = StyleSheet.create({
         width: 28,
         height: 28,
     },
-    find_recipe_container: {},
+    find_recipe_container: {
+        display: 'flex',
+        verticalAlign: 'middle',
+        marginBottom: 24,
+    },
     btn_find_recipe: {
         display: 'flex',
         alignItems: 'center',
