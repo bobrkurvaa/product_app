@@ -73,9 +73,9 @@ export default function FormAddProduct({ navigation }) {
                 </Pressable>
             </View>
             <View style={styles.list_products_container}>
-                {products.length == 0 && (
+                {/* {products.length == 0 && (
                     <ImageBackground source={require('./../assets/fridge-image.png')} resizeMode="contain" style={styles.list_products_fridge_image}/>
-                )}
+                )} */}
                 <FlatList 
                     style={styles.list_products}
                     data={products} renderItem={({item}) => (
