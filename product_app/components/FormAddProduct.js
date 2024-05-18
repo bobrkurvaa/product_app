@@ -113,7 +113,6 @@ const styles = StyleSheet.create({
         display: 'flex',
         flexDirection: 'column',
         height: '100%'
-        
     },
     form_add_product: {
         display: 'flex',
