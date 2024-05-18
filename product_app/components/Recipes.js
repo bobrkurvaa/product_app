@@ -20,20 +20,41 @@ export default function Recipes({ route }) {
     return new DOMParser().parseFromString(html,'text/html');
   }).then((doc) => {
     let list = []
-    for (let i = 0; i < doc.getElementsByClassName('views-item').length; i++) {    
+    for (let i = 0; i < doc.getElementsByClassName('views-item').length; i++) { 
       list = [
         {
           key: 'recipe_' + new Date().getTime(),
           title: doc.getElementsByClassName('views-item')[i].getElementsByClassName('views-item__item-title')[0].getElementsByTagName('a')[0].attributes._ownerElement.firstChild.data,
-          image: doc.getElementsByClassName('views-item')[i].getElementsByClassName('card__image')[0].getElementsByTagName('img')[0].attributes[2].value
+          image: doc.getElementsByClassName('views-item')[i].getElementsByClassName('card__image')[0].getElementsByTagName('img')[0].attributes[2].value,
+          url: doc.getElementsByClassName('views-item')[i].getElementsByClassName('views-item__item-title')[0].getElementsByTagName('a')[0].attributes[0].value
         },
         ...list
       ]  
     }
 
     return list;
+  }).then(async(recipes) => {
+    for (let i = 0; i < recipes.length; i++) {
+      recipes[i].data = await fetch(
+        'https://vkuso.ru' + recipes[i].url
+      ).then(response => {
+        return response.text();
+      }).then(html => {
+        return new DOMParser().parseFromString(html,'text/html');
+      }).then((recipe) => {
+        return {
+          level: recipe.getElementsByClassName('recipe_information')[0].getElementsByClassName('recipe-difficulty').length > 0 ?
+            recipe.getElementsByClassName('recipe_information')[0].getElementsByClassName('recipe-difficulty')[0].getElementsByTagName('span')[0].childNodes[0].nodeValue : 'Не указано',
+          time: recipe.getElementsByClassName('recipe_information')[0].getElementsByClassName('recipe_info__value').length > 0 ?
+            recipe.getElementsByClassName('recipe_information')[0].getElementsByClassName('recipe_info__value')[0].getElementsByTagName('span')[1].childNodes[0].nodeValue : 'Не указано'
+        }
+      });
+    }  
+
+    return recipes;
   }).then(recipes => {
-      setRecipes(recipes)
+    //console.log(recipes);
+    setRecipes(recipes)
   })
 
   return (
@@ -47,6 +68,8 @@ export default function Recipes({ route }) {
             }}
           />
           <Text>{item.title}</Text>
+          <Text>Сложность {item.data.level}</Text>
+          <Text>Время приготовления {item.data.time}</Text>
         </View>
       )} />
     </View>
