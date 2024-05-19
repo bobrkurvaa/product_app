@@ -1,7 +1,7 @@
 import { useState, useRef } from 'react';
 import { FlatList, StyleSheet, View, Text, Image, Pressable} from 'react-native';
 
-export default function Recipes({ route }) {
+export default function Recipes({ navigation, route }) {
   const DOMParser = require('react-native-html-parser').DOMParser;
   
   const [recipes, setRecipes] = useState([
@@ -79,7 +79,37 @@ export default function Recipes({ route }) {
       }).then(async(html) => {
         return await new DOMParser().parseFromString(html,'text/html');
       }).then(recipe => {
+        let products = recipe.getElementsByClassName('recipe-ingr')[0].getElementsByClassName('ingredient');
+        let products_list = [];
+        let instruction_text = '';
+        
+        for (let j = 0; j < products.length; j++) {
+          products_list.push(
+            {
+              title: products[j].getElementsByClassName('name')[0].firstChild.data,
+              weight: products[j].getElementsByClassName('value').length > 0 ? products[j].getElementsByClassName('value')[0].firstChild.data : 0,
+              measure: products[j].getElementsByClassName('type').length > 0 ? products[j].getElementsByClassName('type')[0].firstChild.data : 'не указано'
+            }
+          );
+        }
+
+        if (recipe.getElementsByClassName('instructions ver_2').length > 0) {
+          let instructions = recipe.getElementsByClassName('instructions ver_2')[0].getElementsByClassName('instruction_description _no-photo');
+
+          for (let n = 0; n < instructions.length; n++) {
+            instruction_text += instructions[n].firstChild.data + ' ';
+          }
+        } else if (recipe.getElementsByClassName('instructions').length > 0) {
+          let instructions = recipe.getElementsByClassName('instructions')[0].getElementsByClassName('instruction');
+
+          for (let n = 0; n < instructions.length; n++) {
+            instruction_text += instructions[n].firstChild.data + ' ';
+          }
+        }
+        
         return {
+          products: products_list,
+          instruction: instruction_text,
           level: recipe.getElementsByClassName('recipe_information')[0].getElementsByClassName('recipe-difficulty').length > 0 ?
             recipe.getElementsByClassName('recipe_information')[0].getElementsByClassName('recipe-difficulty')[0].getElementsByTagName('span')[0].childNodes[0].nodeValue : 'Не указано',
           time: recipe.getElementsByClassName('recipe_information')[0].getElementsByClassName('recipe_info__value').length > 0 ?
@@ -145,6 +175,9 @@ export default function Recipes({ route }) {
             </View>
             <Pressable 
               style={styles.btn_show_recipe}
+              onPress={ () => {
+                navigation.navigate('Recipe', item);
+              }}
             >
               <Text style={styles.btn_show_recipe_text}>Подробнее</Text>
             </Pressable>

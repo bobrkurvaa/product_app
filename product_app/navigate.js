@@ -3,6 +3,7 @@ import Home from "./components/Home";
 import Whishlist from "./components/Whishlist";
 import Profile from "./components/Profile";
 import Recipes from "./components/Recipes";
+import Recipe from "./components/Recipe";
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -87,6 +88,15 @@ export default function Navigate() {
                                 options={
                                     {
                                         title: 'Рецепты',
+                                    }
+                                }
+                            />
+                            <Stack.Screen 
+                                name="Recipe" 
+                                component={Recipe} 
+                                options={
+                                    {
+                                        title: 'Рецепт',
                                     }
                                 }
                             />
