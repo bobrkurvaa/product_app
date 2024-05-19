@@ -160,7 +160,7 @@ const styles = StyleSheet.create({
         paddingVertical: 16,
     },
     form_add_product_btn_text: {
-        color: '#ffffff',
+        color: '#FFFFFF',
         fontSize: 18,
         fontWeight: '500',
     },

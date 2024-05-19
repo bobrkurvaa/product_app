@@ -57,15 +57,17 @@ export default function Recipes({ navigation, route }) {
 
       for (let i = 0; i < recipes_count; i++) { 
         let recipe = doc.getElementsByClassName('views-item')[i];
-        list = [
-          {
-            key: 'recipe_' + new Date().getTime(),
-            title: recipe.getElementsByClassName('views-item__item-title')[0].getElementsByTagName('a')[0].attributes._ownerElement.firstChild.data,
-            image: recipe.getElementsByClassName('card__image')[0].getElementsByTagName('img')[0].attributes[2].value,
-            url: recipe.getElementsByClassName('views-item__item-title')[0].getElementsByTagName('a')[0].attributes[0].value
-          },
-          ...list
-        ]  
+        let url = recipe.getElementsByClassName('views-item__item-title')[0].getElementsByTagName('a')[0].attributes[0].value;
+        
+        if (!url.includes('/wiki/')) {
+          list = [
+            {
+              key: 'recipe_' + new Date().getTime(),
+              url: url
+            },
+            ...list
+          ]  
+        }
       }
     } 
 
@@ -82,13 +84,25 @@ export default function Recipes({ navigation, route }) {
         let products = recipe.getElementsByClassName('recipe-ingr')[0].getElementsByClassName('ingredient');
         let products_list = [];
         let instruction_text = '';
+        let search_products_array = search_products.slice();
         
         for (let j = 0; j < products.length; j++) {
+          let in_stock = false;
+          
+
+          search_products_array.forEach((product_title, index) => {
+            if (products[j].getElementsByClassName('name')[0].firstChild.data.includes(product_title)) {
+              in_stock = true;
+              search_products_array.splice(index, 1);
+            }
+          });
+
           products_list.push(
             {
               title: products[j].getElementsByClassName('name')[0].firstChild.data,
               weight: products[j].getElementsByClassName('value').length > 0 ? products[j].getElementsByClassName('value')[0].firstChild.data : 0,
-              measure: products[j].getElementsByClassName('type').length > 0 ? products[j].getElementsByClassName('type')[0].firstChild.data : 'не указано'
+              measure: products[j].getElementsByClassName('type').length > 0 ? products[j].getElementsByClassName('type')[0].firstChild.data : 'не указано',
+              in_stock: in_stock
             }
           );
         }
@@ -106,8 +120,12 @@ export default function Recipes({ navigation, route }) {
             instruction_text += instructions[n].firstChild.data + ' ';
           }
         }
+
+        //console.log(recipe.getElementsByClassName('hrecipe')[0].getElementsByTagName('h1')[0].childNodes[0].nodeValue);
         
         return {
+          title: recipe.getElementsByClassName('hrecipe')[0].getElementsByTagName('h1')[0].childNodes[0].nodeValue,
+          image: recipe.getElementsByClassName('recipe-img')[0].getElementsByTagName('img')[0].attributes[3].value,
           products: products_list,
           instruction: instruction_text,
           level: recipe.getElementsByClassName('recipe_information')[0].getElementsByClassName('recipe-difficulty').length > 0 ?
@@ -142,11 +160,11 @@ export default function Recipes({ navigation, route }) {
           <Image 
             style={styles.recipe_image}
             source={{
-              uri: item.image,
+              uri: item.data.image,
             }}
           />
           <View style={styles.recipe_content}>
-            <Text style={styles.recipe_title}>{item.title}</Text>
+            <Text style={styles.recipe_title}>{item.data.title}</Text>
             <View style={styles.recipe_details}>
               <View style={styles.recipe_detail}>
                 <Image 
@@ -221,9 +239,9 @@ export default function Recipes({ navigation, route }) {
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
-      height: 520,
+      height: 528,
       margin: '4%',
-      paddingBottom: 24,
+      paddingVertical: 20,
       paddingHorizontal: 14,
       backgroundColor: '#FFFFFF',
       borderRadius: 8
