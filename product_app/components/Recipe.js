@@ -21,7 +21,7 @@ export default function Recipe({ navigation, route }) {
           console.log(data);
         });
     });*/
-
+/*
     fetch(
         'https://sbermarket.ru/api/v2/products'
     ).then(async(response) => {
@@ -29,7 +29,7 @@ export default function Recipe({ navigation, route }) {
     }).then((response) => {
         console.log(response);
     })
-
+*/
     return (
         <ScrollView style={styles.recipe_container}>
             <Image 
@@ -56,7 +56,7 @@ export default function Recipe({ navigation, route }) {
             <Pressable 
               style={styles.btn_buy_products}
               onPress={ () => {
-                navigation.navigate('Order');
+                navigation.navigate('Order', route.params.data.products);
               }}
             >
               <Text style={styles.btn_buy_products_text}>Докупить продукты</Text>
