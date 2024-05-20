@@ -21,15 +21,7 @@ export default function Recipe({ navigation, route }) {
           console.log(data);
         });
     });*/
-/*
-    fetch(
-        'https://sbermarket.ru/api/v2/products'
-    ).then(async(response) => {
-        return await response.json();
-    }).then((response) => {
-        console.log(response);
-    })
-*/
+
     return (
         <ScrollView style={styles.recipe_container}>
             <Image 
