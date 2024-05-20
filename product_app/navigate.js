@@ -4,6 +4,7 @@ import Whishlist from "./components/Whishlist";
 import Profile from "./components/Profile";
 import Recipes from "./components/Recipes";
 import Recipe from "./components/Recipe";
+import Order from "./components/Order";
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -100,6 +101,15 @@ export default function Navigate() {
                                     }
                                 }
                             />
+                            <Stack.Screen 
+                                name="Order" 
+                                component={Order} 
+                                options={
+                                    {
+                                        title: 'Оформление заказа',
+                                    }
+                                }
+                            />
                         </Stack.Navigator>
                     )}
                 </Tab.Screen>
@@ -109,7 +119,7 @@ export default function Navigate() {
                 />
                 <Tab.Screen 
                     name="Профиль" 
-                    component={Profile} 
+                    component={Order} 
                 />
             </Tab.Navigator>
         </NavigationContainer>

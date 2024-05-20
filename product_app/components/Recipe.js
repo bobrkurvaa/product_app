@@ -1,7 +1,35 @@
 import { useState, useRef } from 'react';
 import { FlatList, StyleSheet, ScrollView, View, Text, Image, Pressable} from 'react-native';
 
-export default function Recipe({ route }) {
+export default function Recipe({ navigation, route }) {
+
+    /*
+    const credentials = {
+        email: "asd@asd.asd", //email
+        password: "123123123", //пароль
+        latitude: 45.0001, // широта
+        longitude: 36.0001 // долгота
+    }
+
+    const apiClient = new sbermarketApi(credentials);
+
+    apiClient.login().then((isValid) => {
+        if (!isValid) return false;
+      
+        // получить данные о текущем юзере
+        apiClient.getUser().then((data) => {
+          console.log(data);
+        });
+    });*/
+
+    fetch(
+        'https://sbermarket.ru/api/v2/products'
+    ).then(async(response) => {
+        return await response.json();
+    }).then((response) => {
+        console.log(response);
+    })
+
     return (
         <ScrollView style={styles.recipe_container}>
             <Image 
@@ -25,6 +53,14 @@ export default function Recipe({ route }) {
                     </View>
                 )}
             </View>
+            <Pressable 
+              style={styles.btn_buy_products}
+              onPress={ () => {
+                navigation.navigate('Order');
+              }}
+            >
+              <Text style={styles.btn_buy_products_text}>Докупить продукты</Text>
+            </Pressable>
             <View style={styles.recipe_instruction}>
                 <Text style={styles.recipe_instruction_head}>Приготовление</Text>
                 <Text style={styles.recipe_instruction_text}>{route.params.data.instruction}</Text>
@@ -57,6 +93,7 @@ const styles = StyleSheet.create({
         alignItems: 'flex-start',
         width: '100%',
         maxWidth: '100%',
+        marginBottom: 18,
         paddingVertical: 16,
         paddingHorizontal: 12,
         borderRadius: 8
@@ -84,6 +121,19 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: '500',
         color: '#151515',
+    },
+    btn_buy_products: {
+        display: 'flex',
+        alignItems: 'center',
+        borderRadius: 50,
+        backgroundColor: '#6DE5B5',
+        paddingVertical: 24,
+        width: '100%',
+    },
+    btn_buy_products_text: {
+        color: '#151515',
+        fontSize: 18,
+        fontWeight: '500',
     },
     recipe_instruction: {
         width: '100%',
