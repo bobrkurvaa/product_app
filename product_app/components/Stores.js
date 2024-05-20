@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
-import { StyleSheet, View, Text, Image, FlatList} from 'react-native';
-
+import { StyleSheet, View, Text, Image, FlatList, Pressable} from 'react-native';
+ 
 export default function Order() {
     const [position, setPosition] = useState({
         latitude: 55.702936,
@@ -66,9 +66,17 @@ export default function Order() {
                             }}
                         />
                     </View>
-                    <View>
-                        <Text>Доставка {item.delivery_text}</Text>
-                        <Text>Заказ от {item.order_amount}₽</Text>
+                    <View style={styles.store_data}>
+                        <Text style={styles.store_delivery_text}>Доставка: {item.delivery_text}</Text>
+                        <Text style={styles.store_order_amount}>Заказ от {item.order_amount}₽</Text>
+                        <Pressable 
+                              style={styles.btn_select_store}
+                              onPress={ () => {
+                                navigation.navigate('Order', route.params.data.products);
+                              }}
+                            >
+                              <Text style={styles.btn_select_store_text}>Выбрать</Text>
+                        </Pressable>
                     </View>
                 </View>
             )} />
@@ -123,5 +131,24 @@ const styles = StyleSheet.create({
         width: 168,
         height: 168,
         objectFit: 'contain'
+    },
+    store_data: {
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+        height: 120,
+        width: '48%'
+    },
+    btn_select_store: {
+        display: 'flex',
+        alignItems: 'center',
+        borderRadius: 50,
+        backgroundColor: '#6DE5B5',
+        paddingVertical: 12,
+    },
+    btn_select_store_text: {
+        color: '#151515',
+        fontSize: 16,
+        fontWeight: '500',
     }
 });
