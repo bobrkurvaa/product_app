@@ -10,23 +10,26 @@ export default function Order() {
     const [stores, setStores] = useState([]);
 
     fetch(
-        'https://sbermarket.ru/api/v3/multisearches?include%5B%5D=retailer&q=' + encodeURI('Колбаса') + '&lat=' + position.latitude + '&lon=' + position.longitude
+        'https://sbermarket.ru/api/v2/multisearches?q=' + encodeURI('Огурец') + '&lat=' + position.latitude + '&lon=' + position.longitude + '&include%5B%5D=retailer&include%5B%5D=closest_shipping_options'
     ).then(async(response) => {
         return await response.json();
     }).then(response => {
         let stores_data = [];
 
         response.stores.forEach(store => {
-            stores_data.push(
-                {
-                    key: stores_data.length,
-                    id: store.id,
-                    name: store.retailer.name,
-                    logo: store.retailer.logo,
-                    logo_background_color: store.retailer.logo_background_color,
-                    delivery_text: store.next_delivery == null ? 'время не указано' : store.next_delivery.summary
-                }    
-            )
+            if (store.vertical == 'grocery') {
+                stores_data.push(
+                    {
+                        key: stores_data.length,
+                        id: store.id,
+                        name: store.retailer.name,
+                        logo: store.retailer.logo,
+                        logo_background_color: store.retailer.logo_background_color,
+                        delivery_text: store.next_delivery == null ? 'время не указано' : store.next_delivery.summary,
+                        order_amount: store.min_order_amount
+                    }    
+                )
+            }
         });
         
         return stores_data;
@@ -35,7 +38,7 @@ export default function Order() {
     });
 
     return (
-        <View>
+        <View style={styles.stores_container}>
             {stores.length == 0 && (
                 <View style={styles.stores_preloader_container}>
                    <Text style={styles.stores_preloader_text}>Подбираем магазины...</Text>
@@ -46,7 +49,7 @@ export default function Order() {
                 </View>
             )}
             <FlatList data={stores} renderItem={({ item }) => (
-                <View>
+                <View style={styles.store}>
                     <Image 
                         style={{
                             width: 168,
@@ -58,9 +61,8 @@ export default function Order() {
                           uri: item.logo,
                         }}
                     />
-                    <Text>{item.name}</Text>
-                    <Text>{item.id}</Text>
-                    <Text>Доставка: {item.delivery_text}</Text>
+                    <Text>Доставка {item.delivery_text}</Text>
+                    <Text>Заказ от {item.order_amount}₽</Text>
                 </View>
             )} />
         </View>
@@ -68,6 +70,11 @@ export default function Order() {
 }
 
 const styles = StyleSheet.create({
+    stores_container: {
+        paddingHorizontal: 18,
+        backgroundColor: '#FFFFFF',
+        
+    },
     stores_preloader_container: {
         display: 'flex',
         flexDirection: 'column',
@@ -85,6 +92,17 @@ const styles = StyleSheet.create({
     stores_preloader_animate: {
         width: 52,
         height: 52
+    },
+    store: {
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        maxWidth: 360,
+        marginBottom: 18,
+        paddingVertical: 14,
+        borderColor: '#e5ecf1',
+        borderWidth: 2,
+        borderRadius: 14
     },
     store_logo: {
         width: 168,
