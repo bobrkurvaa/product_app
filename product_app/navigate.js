@@ -4,7 +4,8 @@ import Whishlist from "./components/Whishlist";
 import Profile from "./components/Profile";
 import Recipes from "./components/Recipes";
 import Recipe from "./components/Recipe";
-import Order from "./components/Stores";
+import Stores from "./components/Stores";
+import Order from "./components/Order";
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -102,11 +103,20 @@ export default function Navigate() {
                                 }
                             />
                             <Stack.Screen 
+                                name="Stores" 
+                                component={Stores} 
+                                options={
+                                    {
+                                        title: 'Выбор магазина',
+                                    }
+                                }
+                            />
+                            <Stack.Screen 
                                 name="Order" 
                                 component={Order} 
                                 options={
                                     {
-                                        title: 'Оформление заказа',
+                                        title: 'Создание заказа',
                                     }
                                 }
                             />
@@ -119,7 +129,7 @@ export default function Navigate() {
                 />
                 <Tab.Screen 
                     name="Профиль" 
-                    component={Order} 
+                    component={Stores} 
                 />
             </Tab.Navigator>
         </NavigationContainer>

@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import { StyleSheet, View, Text, Image, FlatList, Pressable} from 'react-native';
  
-export default function Order() {
+export default function Stores({ navigation }) {
     const [position, setPosition] = useState({
         latitude: 55.702936,
         longitude: 37.530768
@@ -37,6 +37,27 @@ export default function Order() {
         await setStores(stores);
     });
 
+    const createOrder = (store) => {
+        let products = [
+            {
+                title: 'Сыр Камамбер'
+            },
+            {
+                title: 'Колбаса'
+            },
+            {
+                title: 'Огурец'
+            }
+        ] 
+        navigation.navigate(
+            'Order', 
+            { 
+                store: store,
+                products: products
+            }
+        );
+    }
+
     return (
         <View style={styles.stores_container}>
             {stores.length == 0 && (
@@ -71,9 +92,7 @@ export default function Order() {
                         <Text style={styles.store_order_amount}>Заказ от {item.order_amount}₽</Text>
                         <Pressable 
                               style={styles.btn_select_store}
-                              onPress={ () => {
-                                navigation.navigate('Order', route.params.data.products);
-                              }}
+                              onPress={()=>createOrder(item.id)}
                             >
                               <Text style={styles.btn_select_store_text}>Выбрать</Text>
                         </Pressable>
@@ -91,7 +110,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         paddingHorizontal: 18,
         backgroundColor: '#FFFFFF',
-        
     },
     stores_preloader_container: {
         display: 'flex',
@@ -113,7 +131,8 @@ const styles = StyleSheet.create({
     },
     stores: {
         width: '100%',
-        maxWidth: 480
+        maxWidth: 480,
+        marginBottom: 92
     },
     store: {
         display: 'flex',
