@@ -48,21 +48,28 @@ export default function Order() {
                     />
                 </View>
             )}
-            <FlatList data={stores} renderItem={({ item }) => (
+            <FlatList 
+                style={styles.stores}
+                data={stores} 
+                renderItem={({ item }) => (
                 <View style={styles.store}>
-                    <Image 
-                        style={{
-                            width: 168,
-                            height: 124,
-                            objectFit: 'contain',
-                            backgroundColor: item.logo_background_color
-                        }}
-                        source={{
-                          uri: item.logo,
-                        }}
-                    />
-                    <Text>Доставка {item.delivery_text}</Text>
-                    <Text>Заказ от {item.order_amount}₽</Text>
+                    <View>
+                        <Image 
+                            style={{
+                                width: 168,
+                                height: 124,
+                                objectFit: 'contain',
+                                backgroundColor: item.logo_background_color
+                            }}
+                            source={{
+                              uri: item.logo,
+                            }}
+                        />
+                    </View>
+                    <View>
+                        <Text>Доставка {item.delivery_text}</Text>
+                        <Text>Заказ от {item.order_amount}₽</Text>
+                    </View>
                 </View>
             )} />
         </View>
@@ -71,6 +78,9 @@ export default function Order() {
 
 const styles = StyleSheet.create({
     stores_container: {
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
         paddingHorizontal: 18,
         backgroundColor: '#FFFFFF',
         
@@ -93,11 +103,16 @@ const styles = StyleSheet.create({
         width: 52,
         height: 52
     },
+    stores: {
+        width: '100%',
+        maxWidth: 480
+    },
     store: {
         display: 'flex',
-        flexDirection: 'column',
+        flexDirection: 'row',
         alignItems: 'center',
-        maxWidth: 360,
+        justifyContent: 'space-around',
+        width: '100%',
         marginBottom: 18,
         paddingVertical: 14,
         borderColor: '#e5ecf1',
