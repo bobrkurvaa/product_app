@@ -44,12 +44,11 @@ export default function Order({ navigation, route }) {
     });
 
     return (
-      <View>
-        <Text>Создание заказа</Text>
-        <Text>{route.params.store}</Text>
+      <View style={styles.order_container}>
+        <Text>Продукты, которые необходимо докупить</Text>
         {products.map((item) =>
             <View style={styles.recipe_product}>
-                <Text style={styles.recipe_product_title}>{item.search_product}</Text>
+                <Text style={styles.order_product_title}>{item.search_product}</Text>
                 <ScrollView
                     horizontal={true} 
                     style={styles.order_product_variations}
@@ -75,10 +74,29 @@ export default function Order({ navigation, route }) {
 }
 
 const styles = StyleSheet.create({
+    order_container: {
+        height: '100%',
+        paddingHorizontal: 18,
+        backgroundColor: '#FFFFFF',
+    },
+    order_product_title:  {
+        color: '#151515',
+        fontSize: 18,
+        fontWeight: '500'
+    },
     order_product_variations: {
+        marginVertical: 12
+    },
+    order_product_variation: {
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        width: 128,
+        paddingHorizontal: 14,
+        paddingVertical: 16
     },
     order_product_variation_image: {
-        width: 64,
-        height: 64
+        width: 96,
+        height: 96
     }
 });
