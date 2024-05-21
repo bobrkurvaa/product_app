@@ -45,11 +45,26 @@ export default function Order({ navigation, route }) {
 
     return (
       <ScrollView style={styles.order_container}>
-        <Text>Продукты, которые необходимо докупить</Text>
+        {products.length == 0 && (
+            <View style={styles.order_preloader_container}>
+               <Text style={styles.order_preloader_text}>Ищем продукты...</Text>
+               <Image 
+                  style={styles.order_preloader_animate}
+                  source={require('./../assets/preloader.gif')}
+                />
+            </View>
+        )}
+        {products.length > 0 && (
+            <Text style={styles.order_head_text}>Выберите продукты, которые необходимо докупить</Text>
+        )}
         <View style={styles.order_products_container}>
             {products.map((item) =>
                 <View style={styles.order_product}>
                     <Text style={styles.order_product_title}>{item.search_product}</Text>
+                    {item.product_variations.length == 0 && (
+                        <Text style={styles.order_product_variation_not_found_text}>Продукты не найдены</Text>
+                    )}
+                    {item.product_variations.length > 0 && (
                     <ScrollView
                         horizontal={true} 
                         style={styles.order_product_variations}
@@ -71,6 +86,7 @@ export default function Order({ navigation, route }) {
                             </View>
                         )}
                     </ScrollView>
+                    )}
                 </View>
             )}
         </View>
@@ -84,16 +100,50 @@ const styles = StyleSheet.create({
         paddingHorizontal: 18,
         backgroundColor: '#FFFFFF',
     },
+    order_preloader_container: {
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '100%',
+        paddingHorizontal: 18,
+        backgroundColor: '#FFFFFF'     
+    },
+    order_preloader_text: {
+        fontSize: 18,
+        fontWeight: '600',
+        marginBottom: 24,
+    },
+    order_preloader_animate: {
+        width: 52,
+        height: 52
+    },
+    order_head_text: {
+        marginTop: 12,
+        marginBottom: 8,
+        color: '#151515',
+        fontSize: 18,
+        lineHeight: 24,
+        fontWeight: '500'
+    },
     order_products_container: {
         marginBottom: 96
+    },
+    order_product: {
+        
     },
     order_product_title:  {
         color: '#151515',
         fontSize: 20,
-        fontWeight: '600'
+        fontWeight: '700'
+    },
+    order_product_variation_not_found_text: {
+        marginVertical: 30,
+        fontSize: 16,
+        fontWeight: '500'
     },
     order_product_variations: {
-        marginVertical: 16
+        marginVertical: 30
     },
     order_product_variation: {
         display: 'flex',
@@ -104,7 +154,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 14,
         paddingTop: 8,
         paddingBottom: 16,
-        marginVertical: 14,
+        marginHorizontal: 8,
         borderColor: '#e5ecf1',
         borderWidth: 2,
         borderRadius: 14
