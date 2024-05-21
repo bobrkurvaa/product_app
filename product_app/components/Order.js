@@ -46,30 +46,34 @@ export default function Order({ navigation, route }) {
     return (
       <ScrollView style={styles.order_container}>
         <Text>Продукты, которые необходимо докупить</Text>
-        {products.map((item) =>
-            <View style={styles.recipe_product}>
-                <Text style={styles.order_product_title}>{item.search_product}</Text>
-                <ScrollView
-                    horizontal={true} 
-                    style={styles.order_product_variations}
-                >
-                    {item.product_variations.map((product_variation) =>
-                        <View style={styles.order_product_variation}>
-                            <Image 
-                                style={styles.order_product_variation_image}
-                                source={{
-                                    uri: product_variation.image
-                                }}
-                            />
-                            <Text style={styles.order_product_variation_title}>{product_variation.name}</Text>
-                            <View></View>
-                            <Text style={styles.stores_preloader_text}>{product_variation.price}₽</Text>
-                            <Text style={styles.stores_preloader_text}>{product_variation.human_volume}</Text>
-                        </View>
-                    )}
-                </ScrollView>
-            </View>
-        )}
+        <View style={styles.order_products_container}>
+            {products.map((item) =>
+                <View style={styles.order_product}>
+                    <Text style={styles.order_product_title}>{item.search_product}</Text>
+                    <ScrollView
+                        horizontal={true} 
+                        style={styles.order_product_variations}
+                    >
+                        {item.product_variations.map((product_variation) =>
+                            <View style={styles.order_product_variation}>
+                                <Image 
+                                    style={styles.order_product_variation_image}
+                                    source={{
+                                        uri: product_variation.image
+                                    }}
+                                />
+                                <Text style={styles.order_product_variation_title}>{product_variation.name}</Text>
+                                <View style={styles.order_product_variation_data}>
+                                    <Text style={styles.order_product_variation_price}>{product_variation.price} ₽</Text>
+                                    <Text style={styles.order_product_variation_weight}>{product_variation.human_volume}</Text>
+                                </View>
+                                
+                            </View>
+                        )}
+                    </ScrollView>
+                </View>
+            )}
+        </View>
       </ScrollView>
     );
 }
@@ -79,6 +83,9 @@ const styles = StyleSheet.create({
         height: '100%',
         paddingHorizontal: 18,
         backgroundColor: '#FFFFFF',
+    },
+    order_products_container: {
+        marginBottom: 96
     },
     order_product_title:  {
         color: '#151515',
@@ -91,11 +98,13 @@ const styles = StyleSheet.create({
     order_product_variation: {
         display: 'flex',
         flexDirection: 'column',
+        justifyContent: 'space-between',
         alignItems: 'center',
         width: 228,
         paddingHorizontal: 14,
-        paddingVertical: 8,
-        marginHorizontal: 6,
+        paddingTop: 8,
+        paddingBottom: 16,
+        marginVertical: 14,
         borderColor: '#e5ecf1',
         borderWidth: 2,
         borderRadius: 14
@@ -108,5 +117,25 @@ const styles = StyleSheet.create({
         color: '#151515',
         fontSize: 16,
         fontWeight: '600'
+    },
+    order_product_variation_data: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'flex-end',
+        width: '100%',
+        marginTop: 8
+    },
+    order_product_variation_price: {
+        width: '65%',
+        textAlign: 'right',
+        color: '#151515',
+        fontSize: 20,
+        fontWeight: '500'
+    },
+    order_product_variation_weight: {
+        color: '#151515',
+        fontSize: 15,
+        fontWeight: '400'
     }
 });
