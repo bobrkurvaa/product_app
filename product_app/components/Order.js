@@ -31,6 +31,7 @@ export default function Order({ navigation, route }) {
             await setProductsArray((list) => {
                 return [
                     {
+                        key: list.length,
                         search_product: product.title,
                         product_variations: variations
                     },
