@@ -3,8 +3,7 @@ import { StyleSheet, View, Text, Image} from 'react-native';
 
 export default function Order({ navigation, route }) {
     const [products, setProducts] = useState([]);
-
-    var products_array = [];
+    const [products_array, setProductsArray] = useState([]);
 
     route.params.products.forEach((product, key) => {
         fetch(
@@ -27,17 +26,33 @@ export default function Order({ navigation, route }) {
             })
 
             return variations;
-        }).then(variations => {
-            products_array.push({
-                search_product: product.title,
-                product_variations: variations
+        }).then((variations) => {
+            setProductsArray((list) => {
+                return [
+                    {
+                        search_product: product.title,
+                        product_variations: variations
+                    },
+                    ...list
+                ]
             })
-        }).then(()=>{
+
             if (products_array.length == route.params.products.length) {
-                console.log(products_array)
                 setProducts(products_array);
             }
-        })
+/*
+            setProducts((list) => {
+                return [
+                    {
+                        search_product: product.title,
+                        product_variations: variations
+                    },
+                    ...list
+                ]
+            });
+*/
+            return variations;
+        });
     });
 
     return (
