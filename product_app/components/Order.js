@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { StyleSheet, View, ScrollView, Text, Image} from 'react-native';
+import { StyleSheet, View, ScrollView, Text, Image, TouchableOpacity } from 'react-native';
 
 export default function Order({ navigation, route }) {
     const [products, setProducts] = useState([]);
@@ -15,6 +15,7 @@ export default function Order({ navigation, route }) {
 
             response.products.forEach(item => {
                 variations.push({
+                    key: variations.length,
                     id: item.id,
                     name: item.name,
                     image: item.images[0].small_url,
@@ -43,6 +44,22 @@ export default function Order({ navigation, route }) {
         });
     });
 
+    const addProduct = (product) => {
+        console.log(product);
+        fetch(
+            'https://sbermarket.ru/api/v2/products/' + product
+        ).then(async(response) => {
+            return await response.json();
+        }).then(async(response) => {
+            navigation.navigate(
+                'Product', 
+                { 
+                    uri: 'metro/' + response.product.slug
+                }
+            )
+        });
+    }
+
     return (
       <ScrollView style={styles.order_container}>
         {products.length == 0 && (
@@ -59,7 +76,7 @@ export default function Order({ navigation, route }) {
         )}
         <View style={styles.order_products_container}>
             {products.map((item) =>
-                <View style={styles.order_product}>
+                <View style={styles.order_product} >
                     <Text style={styles.order_product_title}>{item.search_product}</Text>
                     {item.product_variations.length == 0 && (
                         <Text style={styles.order_product_variation_not_found_text}>Продукты не найдены</Text>
@@ -70,7 +87,10 @@ export default function Order({ navigation, route }) {
                         style={styles.order_product_variations}
                     >
                         {item.product_variations.map((product_variation) =>
-                            <View style={styles.order_product_variation}>
+                            <TouchableOpacity  
+                                style={styles.order_product_variation}
+                                onPress={()=>addProduct(product_variation.id)}
+                            >
                                 <Image 
                                     style={styles.order_product_variation_image}
                                     source={{
@@ -83,7 +103,7 @@ export default function Order({ navigation, route }) {
                                     <Text style={styles.order_product_variation_weight}>{product_variation.human_volume}</Text>
                                 </View>
                                 
-                            </View>
+                            </TouchableOpacity >
                         )}
                     </ScrollView>
                     )}

@@ -6,6 +6,7 @@ import Recipes from "./components/Recipes";
 import Recipe from "./components/Recipe";
 import Stores from "./components/Stores";
 import Order from "./components/Order";
+import Product from "./components/Product";
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -117,6 +118,15 @@ export default function Navigate() {
                                 options={
                                     {
                                         title: 'Создание заказа',
+                                    }
+                                }
+                            />
+                            <Stack.Screen 
+                                name="Product" 
+                                component={Product} 
+                                options={
+                                    {
+                                        title: 'Добавление в корзину',
                                     }
                                 }
                             />

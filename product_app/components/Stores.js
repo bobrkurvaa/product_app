@@ -40,12 +40,15 @@ export default function Stores({ navigation }) {
     const createOrder = (store) => {
         let products = [
             {
+                key: 1,
                 title: 'Сыр Камамбер'
             },
             {
+                key: 2,
                 title: 'Колбаса'
             },
             {
+                key: 3,
                 title: 'Огурец'
             }
         ] 
