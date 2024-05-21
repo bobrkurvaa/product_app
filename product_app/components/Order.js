@@ -63,6 +63,8 @@ export default function Order({ navigation, route }) {
                                 }}
                             />
                             <Text style={styles.stores_preloader_text}>{product_variation.name}</Text>
+                            <Text style={styles.stores_preloader_text}>{product_variation.price}</Text>
+                            <Text style={styles.stores_preloader_text}>{product_variation.human_volume}</Text>
                         </View>
                     )}
                 </ScrollView>
