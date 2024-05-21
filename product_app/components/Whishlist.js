@@ -1,9 +1,8 @@
-import { StyleSheet, View} from 'react-native';
-import Header from './Header';
-import Footer from './Footer';
+import { StyleSheet, View, Text} from 'react-native';
+import { WebView } from 'react-native-webview';
 
 export default function Whishlist() {
-    fetch(
+    /*fetch(
       'https://sbermarket.ru/api/v2/phone_confirmations',
       {
         method: 'POST',
@@ -19,10 +18,15 @@ export default function Whishlist() {
       return response.text();
     }).then(response => {
       console.log(response)
-    });
+    });*/
 
     return (
       <View>
+      <Text>Заказ</Text>
+        <WebView
+          source={{uri: 'https://sbermarket.ru/'}}
+          style={{marginTop: 20}}
+        />
       </View>
     );
 }
