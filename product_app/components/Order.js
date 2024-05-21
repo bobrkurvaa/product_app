@@ -17,7 +17,7 @@ export default function Order({ navigation, route }) {
                 variations.push({
                     id: item.id,
                     name: item.name,
-                    image: item.images[0].product_url,
+                    image: item.images[0].small_url,
                     price: item.price,
                     human_volume: item.human_volume,
                     volume: item.volume,
@@ -44,7 +44,7 @@ export default function Order({ navigation, route }) {
     });
 
     return (
-      <View style={styles.order_container}>
+      <ScrollView style={styles.order_container}>
         <Text>Продукты, которые необходимо докупить</Text>
         {products.map((item) =>
             <View style={styles.recipe_product}>
@@ -61,15 +61,16 @@ export default function Order({ navigation, route }) {
                                     uri: product_variation.image
                                 }}
                             />
-                            <Text style={styles.stores_preloader_text}>{product_variation.name}</Text>
-                            <Text style={styles.stores_preloader_text}>{product_variation.price}</Text>
+                            <Text style={styles.order_product_variation_title}>{product_variation.name}</Text>
+                            <View></View>
+                            <Text style={styles.stores_preloader_text}>{product_variation.price}₽</Text>
                             <Text style={styles.stores_preloader_text}>{product_variation.human_volume}</Text>
                         </View>
                     )}
                 </ScrollView>
             </View>
         )}
-      </View>
+      </ScrollView>
     );
 }
 
@@ -81,22 +82,31 @@ const styles = StyleSheet.create({
     },
     order_product_title:  {
         color: '#151515',
-        fontSize: 18,
-        fontWeight: '500'
+        fontSize: 20,
+        fontWeight: '600'
     },
     order_product_variations: {
-        marginVertical: 12
+        marginVertical: 16
     },
     order_product_variation: {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        width: 128,
+        width: 228,
         paddingHorizontal: 14,
-        paddingVertical: 16
+        paddingVertical: 8,
+        marginHorizontal: 6,
+        borderColor: '#e5ecf1',
+        borderWidth: 2,
+        borderRadius: 14
     },
     order_product_variation_image: {
-        width: 96,
-        height: 96
+        width: 192,
+        height: 192
+    },
+    order_product_variation_title: {
+        color: '#151515',
+        fontSize: 16,
+        fontWeight: '600'
     }
 });
