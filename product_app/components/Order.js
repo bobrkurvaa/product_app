@@ -17,7 +17,7 @@ export default function Order({ navigation, route }) {
                 variations.push({
                     id: item.id,
                     name: item.name,
-                    image: item.images.small_url,
+                    image: item.images[0].small_url,
                     price: item.price,
                     human_volume: item.human_volume,
                     volume: item.volume,
@@ -40,18 +40,6 @@ export default function Order({ navigation, route }) {
             if (products_array.length == route.params.products.length) {
                 setProducts(products_array);
             }
-/*
-            setProducts((list) => {
-                return [
-                    {
-                        search_product: product.title,
-                        product_variations: variations
-                    },
-                    ...list
-                ]
-            });
-*/
-            return variations;
         });
     });
 
