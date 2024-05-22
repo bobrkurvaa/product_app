@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import { StyleSheet, View, Text, Image, FlatList, Pressable} from 'react-native';
  
-export default function Stores({ navigation }) {
+export default function Stores({ navigation, route }) {
     const [position, setPosition] = useState({
         latitude: 55.702936,
         longitude: 37.530768
@@ -9,8 +9,10 @@ export default function Stores({ navigation }) {
 
     const [stores, setStores] = useState([]);
 
+
+    
     fetch(
-        'https://sbermarket.ru/api/v2/multisearches?q=' + encodeURI('Огурец') + '&lat=' + position.latitude + '&lon=' + position.longitude + '&include%5B%5D=retailer&include%5B%5D=closest_shipping_options'
+        'https://sbermarket.ru/api/v2/multisearches?q=' + encodeURI(route.params.products[0].title) + '&lat=' + position.latitude + '&lon=' + position.longitude + '&include%5B%5D=retailer&include%5B%5D=closest_shipping_options'
     ).then(async(response) => {
         return await response.json();
     }).then(response => {
@@ -39,7 +41,7 @@ export default function Stores({ navigation }) {
     });
 
     const createOrder = (store, store_slug) => {
-        let products = [
+        /*let products = [
             {
                 key: '1',
                 title: 'Сыр Камамбер'
@@ -52,13 +54,13 @@ export default function Stores({ navigation }) {
                 key: '3',
                 title: 'Огурец'
             }
-        ] 
+        ] */
         navigation.navigate(
             'Order', 
             { 
                 store: store,
                 store_slug: store_slug,
-                products: products
+                products: route.params.products
             }
         );
     }

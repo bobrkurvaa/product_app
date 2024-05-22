@@ -3,7 +3,7 @@ import { StyleSheet, View, ScrollView, Text, Image, TouchableOpacity } from 'rea
 
 export default function Order({ navigation, route }) {
     const [products, setProducts] = useState([]);
-    const [fetchedState,setFetchedState]=useState(null);
+    const [fetchedState, setFetchedState]=useState('loading');
 
 
     
@@ -11,6 +11,8 @@ export default function Order({ navigation, route }) {
         route.params.products.forEach(async(product, key) => {
             await getProducts(product, key)
         });
+
+        setFetchedState('load')
     },[])
 
 

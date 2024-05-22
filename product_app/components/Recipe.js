@@ -1,27 +1,6 @@
-import { useState, useRef } from 'react';
-import { FlatList, StyleSheet, ScrollView, View, Text, Image, Pressable} from 'react-native';
+import { StyleSheet, ScrollView, View, Text, Image, Pressable} from 'react-native';
 
 export default function Recipe({ navigation, route }) {
-
-    /*
-    const credentials = {
-        email: "asd@asd.asd", //email
-        password: "123123123", //пароль
-        latitude: 45.0001, // широта
-        longitude: 36.0001 // долгота
-    }
-
-    const apiClient = new sbermarketApi(credentials);
-
-    apiClient.login().then((isValid) => {
-        if (!isValid) return false;
-      
-        // получить данные о текущем юзере
-        apiClient.getUser().then((data) => {
-          console.log(data);
-        });
-    });*/
-
     return (
         <ScrollView style={styles.recipe_container}>
             <Image 
@@ -34,7 +13,10 @@ export default function Recipe({ navigation, route }) {
             <View style={styles.recipe_products}>
                 <Text style={styles.recipe_products_head}>Ингредиенты</Text>
                 {route.params.data.products.map((item) =>
-                    <View style={styles.recipe_product}>
+                    <View 
+                        style={styles.recipe_product}
+                        key={item.key}
+                    >
                         <Text style={styles.recipe_product_title}>{item.title}</Text>
                         {item.in_stock && (
                             <Text>в наличии</Text>
@@ -48,7 +30,12 @@ export default function Recipe({ navigation, route }) {
             <Pressable 
               style={styles.btn_buy_products}
               onPress={ () => {
-                navigation.navigate('Order', route.params.data.products);
+                navigation.navigate(
+                    'Stores', 
+                    {
+                        products: route.params.data.products
+                    }
+                );
               }}
             >
               <Text style={styles.btn_buy_products_text}>Докупить продукты</Text>

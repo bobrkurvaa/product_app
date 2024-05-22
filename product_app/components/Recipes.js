@@ -99,6 +99,7 @@ export default function Recipes({ navigation, route }) {
 
           products_list.push(
             {
+              key: 'product_' + products_list.length,
               title: products[j].getElementsByClassName('name')[0].firstChild.data,
               weight: products[j].getElementsByClassName('value').length > 0 ? products[j].getElementsByClassName('value')[0].firstChild.data : 0,
               measure: products[j].getElementsByClassName('type').length > 0 ? products[j].getElementsByClassName('type')[0].firstChild.data : 'не указано',
