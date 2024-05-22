@@ -18,22 +18,29 @@ export default function Recipe({ navigation, route }) {
                         key={item.key}
                     >
                         <Text style={styles.recipe_product_title}>{item.title}</Text>
-                        {item.in_stock && (
-                            <Text>в наличии</Text>
-                        )}
                         {item.weight > 0 && (
                             <Text style={styles.recipe_product_weight}>{item.weight} {item.measure}</Text>
                         )}
                     </View>
                 )}
             </View>
+            <Text style={styles.recipe_buy_products_head}>Необходимо докупить: </Text>
+            <Text style={styles.recipe_buy_products_text}>
+                {route.params.data.buy_products.map((item) => {
+                        if (item.key > 0) {
+                            return ', ' + item.title;
+                        }
+                        return item.title;
+                    }
+                )}
+            </Text>
             <Pressable 
               style={styles.btn_buy_products}
               onPress={ () => {
                 navigation.navigate(
                     'Stores', 
                     {
-                        products: route.params.data.products
+                        products: route.params.data.buy_products
                     }
                 );
               }}
@@ -99,6 +106,19 @@ const styles = StyleSheet.create({
     recipe_product_weight: {
         fontSize: 16,
         fontWeight: '500',
+        color: '#151515',
+    },
+    recipe_buy_products_head: {
+        fontSize: 20,
+        marginBottom: 10,
+        fontWeight: '500',
+        color: '#151515',
+    },
+    recipe_buy_products_text: {
+        marginBottom: 16,
+        fontSize: 18,
+        fontWeight: '400',
+        lineHeight: 28,
         color: '#151515',
     },
     btn_buy_products: {

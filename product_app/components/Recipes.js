@@ -85,13 +85,14 @@ export default function Recipes({ navigation, route }) {
         let products_list = [];
         let instruction_text = '';
         let search_products_array = search_products.slice();
+        let buy_products = [];
         
         for (let j = 0; j < products.length; j++) {
+          let title = products[j].getElementsByClassName('name')[0].firstChild.data;
           let in_stock = false;
           
-
           search_products_array.forEach((product_title, index) => {
-            if (products[j].getElementsByClassName('name')[0].firstChild.data.includes(product_title)) {
+            if (title.includes(product_title)) {
               in_stock = true;
               search_products_array.splice(index, 1);
             }
@@ -100,12 +101,19 @@ export default function Recipes({ navigation, route }) {
           products_list.push(
             {
               key: 'product_' + products_list.length,
-              title: products[j].getElementsByClassName('name')[0].firstChild.data,
+              title: title,
               weight: products[j].getElementsByClassName('value').length > 0 ? products[j].getElementsByClassName('value')[0].firstChild.data : 0,
               measure: products[j].getElementsByClassName('type').length > 0 ? products[j].getElementsByClassName('type')[0].firstChild.data : 'не указано',
               in_stock: in_stock
             }
           );
+
+          if(!in_stock) {
+            buy_products.push({
+              key: buy_products.length,
+              title: title
+            })
+          }
         }
 
         if (recipe.getElementsByClassName('instructions ver_2').length > 0) {
@@ -121,14 +129,13 @@ export default function Recipes({ navigation, route }) {
             instruction_text += instructions[n].firstChild.data + ' ';
           }
         }
-
-        //console.log(recipe.getElementsByClassName('hrecipe')[0].getElementsByTagName('h1')[0].childNodes[0].nodeValue);
         
         return {
           title: recipe.getElementsByClassName('hrecipe')[0].getElementsByTagName('h1')[0].childNodes[0].nodeValue,
           image: recipe.getElementsByClassName('recipe-img')[0].getElementsByTagName('img')[0].attributes[3].value,
           products: products_list,
           instruction: instruction_text,
+          buy_products: buy_products,
           level: recipe.getElementsByClassName('recipe_information')[0].getElementsByClassName('recipe-difficulty').length > 0 ?
             recipe.getElementsByClassName('recipe_information')[0].getElementsByClassName('recipe-difficulty')[0].getElementsByTagName('span')[0].childNodes[0].nodeValue : 'Не указано',
           time: recipe.getElementsByClassName('recipe_information')[0].getElementsByClassName('recipe_info__value').length > 0 ?
@@ -139,7 +146,6 @@ export default function Recipes({ navigation, route }) {
 
     return recipes;
   }).then(async(recipes) => {
-    //console.log(recipes);
     await setRecipes(recipes)
   })
 
@@ -190,7 +196,7 @@ export default function Recipes({ navigation, route }) {
             </View>
             <View style={styles.recipe_buy_product}>
               <Text style={styles.recipe_buy_product_label}>Необходимо докупить: </Text>
-              <Text style={styles.recipe_detail_text}>6 продуктов</Text> 
+              <Text style={styles.recipe_detail_text}>{item.data.buy_products.length} продуктов</Text> 
             </View>
             <Pressable 
               style={styles.btn_show_recipe}

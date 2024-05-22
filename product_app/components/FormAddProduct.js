@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react';
-import { StyleSheet, View, TextInput, Text, Pressable, FlatList, Image, ImageBackground } from 'react-native';
+import { StyleSheet, View, TextInput, Text, Pressable, FlatList, Image, Alert, ImageBackground } from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
 
 export default function FormAddProduct({ navigation }) {  
@@ -21,20 +21,34 @@ export default function FormAddProduct({ navigation }) {
     }
 
     const addProductHandler = (productTitle) => {
-        product_title_input.current.clear();
-        product_weight_input.current.clear();
+        if (productTitle == '' || productWeight == '' || productMeasure == '') {
+            Alert.alert(
+                'Ошибка', 
+                'Для добавления продукта, необходимо заполнить все поля', 
+                [
+                    {text: 'OK'},
+                ]
+            );
+        } else {
+            product_title_input.current.clear();
+            product_weight_input.current.clear();
 
-        setProduct((list) => {
-            return [
-                {
-                    key: 'product_' + new Date().getTime(),
-                    title: productTitle,
-                    weight: productWeight,
-                    measure: productMeasure
-                },
-                ...list
-            ];       
-        });
+            setProduct((list) => {
+                return [
+                    {
+                        key: 'product_' + new Date().getTime(),
+                        title: productTitle,
+                        weight: productWeight,
+                        measure: productMeasure
+                    },
+                    ...list
+                ];       
+            });
+
+            setProductTitle('');
+            setProductWeight('');
+            setProductMeasure('');
+        }
     };
 
     const removeProductHandler = (key) => {
@@ -139,7 +153,7 @@ const styles = StyleSheet.create({
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-between',
-        height: 242,
+        height: 252,
     },
     form_add_product_head_text: {
         color: '#151515',
@@ -158,7 +172,7 @@ const styles = StyleSheet.create({
         width: '100%',
         marginBottom: 8,
         paddingHorizontal: 16,
-        paddingVertical: 14,
+        paddingVertical: 22,
         backgroundColor: '#FFFFFF',
         borderWidth: 1,
         borderRadius: 18,
