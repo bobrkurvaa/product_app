@@ -79,6 +79,12 @@ export default function Recipes({ navigation, route }) {
               if (weight <= item.weight) {
                 in_stock = true;
               }
+            } else {
+              if (weight > 0) {
+
+              } else {
+                in_stock = true;
+              }
             }
             search_products_array.splice(index, 1);
           }
@@ -133,6 +139,888 @@ export default function Recipes({ navigation, route }) {
       console.log(error)
       return null;
     }
+  }
+
+
+  
+  const convertWeight = (product, measure) => {
+    let measuresArray = [   
+      {  
+        title:'Абрикос',
+        m1:null,
+        m2:null,
+        m3:null,
+        m4:40
+      },
+      {  
+        title:'Апельсин',
+        m1:null,
+        m2:null,
+        m3:null,
+        m4:140
+      },
+      {  
+        title:'Арахис очищенный',
+        m1:175,
+        m2:20,
+        m3:null,
+        m4:null
+      },
+      {  
+        title:'Баклажан',
+        m1:null,
+        m2:null,
+        m3:null,
+        m4:200
+      },
+      {  
+        title:'Болгарский перец',
+        m1:null,
+        m2:null,
+        m3:null,
+        m4:100
+      },
+      {  
+        title:'Брусника',
+        m1:140,
+        m2:null,
+        m3:null,
+        m4:null
+      },
+      {  
+        title:'Варенье',
+        m1:330,
+        m2:50,
+        m3:17,
+        m4:null
+      },
+      {  
+        title:'Вино столовое',
+        m1:250,
+        m2:20,
+        m3:5,
+        m4:null
+      },
+      {  
+        title:'Вишня свежая',
+        m1:190,
+        m2:30,
+        m3:null,
+        m4:null
+      },
+      {  
+        title:'Вода',
+        m1:250,
+        m2:18,
+        m3:5,
+        m4:null
+      },
+      {  
+        title:'Гвоздика молотая',
+        m1:null,
+        m2:null,
+        m3:3,
+        m4:null
+      },
+      {  
+        title:'Гвоздика не молотая',
+        m1:null,
+        m2:null,
+        m3:4,
+        m4:null
+      },
+      {  
+        title:'Гвоздика цельная',
+        m1:null,
+        m2:null,
+        m3:null,
+        m4:0.06
+      },
+      {  
+        title:'Голубика',
+        m1:260,
+        m2:null,
+        m3:null,
+        m4:null
+      },
+      {  
+        title:'Горох лущеный',
+        m1:null,
+        m2:25,
+        m3:10,
+        m4:null
+      },
+      {  
+        title:'Горох не лущеный',
+        m1:null,
+        m2:0,
+        m3:0,
+        m4:null
+      },
+      {  
+        title:'Горчица',
+        m1:null,
+        m2:null,
+        m3:4,
+        m4:null
+      },
+      {  
+        title:'Горчица порошок',
+        m1:null,
+        m2:null,
+        m3:4,
+        m4:null
+      },
+      {  
+        title:'Груша',
+        m1:null,
+        m2:null,
+        m3:null,
+        m4:135
+      },
+      {  
+        title:'Джем',
+        m1:null,
+        m2:40,
+        m3:15,
+        m4:null
+      },
+      {  
+        title:'Ежевика',
+        m1:190,
+        m2:null,
+        m3:null,
+        m4:null
+      },
+      {  
+        title:'Желатин (порошок)',
+        m1:null,
+        m2:15,
+        m3:5,
+        m4:null
+      },
+      {  
+        title:'Желатин гранулированный',
+        m1:null,
+        m2:15,
+        m3:5,
+        m4:null
+      },
+      {  
+        title:'Желатин листик',
+        m1:null,
+        m2:null,
+        m3:null,
+        m4:2.5
+      },
+      {  
+        title:'Земляника',
+        m1:null,
+        m2:null,
+        m3:null,
+        m4:8
+      },
+      {  
+        title:'Изюм',
+        m1:190,
+        m2:25,
+        m3:null,
+        m4:null
+      },
+      {  
+        title:'Какао',
+        m1:null,
+        m2:20,
+        m3:10,
+        m4:null
+      },
+      {  
+        title:'Капуста (кочан)',
+        m1:null,
+        m2:null,
+        m3:null,
+        m4:1750
+      },
+      {  
+        title:'Картофель средний',
+        m1:null,
+        m2:null,
+        m3:null,
+        m4:100
+      },
+      {  
+        title:'Кислота лимонная',
+        m1:null,
+        m2:25,
+        m3:8,
+        m4:null
+      },
+      {  
+        title:'Клубника',
+        m1:150,
+        m2:25,
+        m3:null,
+        m4:null
+      },
+      {  
+        title:'Клюква',
+        m1:145,
+        m2:null,
+        m3:null,
+        m4:null
+      },
+      {  
+        title:'Корица молотая',
+        m1:null,
+        m2:20,
+        m3:8,
+        m4:null
+      },
+      {  
+        title:'Кофе',
+        m1:null,
+        m2:20,
+        m3:10,
+        m4:null
+      },
+      {  
+        title:'Кофе молотый',
+        m1:null,
+        m2:20,
+        m3:7,
+        m4:null
+      },
+      {  
+        title:'Крупа геркулес',
+        m1:90,
+        m2:12,
+        m3:6,
+        m4:null
+      },
+      {  
+        title:'Крупа гречневая',
+        m1:210,
+        m2:15,
+        m3:7,
+        m4:null
+      },
+      {  
+        title:'Крупа манная',
+        m1:200,
+        m2:25,
+        m3:8,
+        m4:null
+      },
+      {  
+        title:'Крупа овсяная',
+        m1:90,
+        m2:12,
+        m3:null,
+        m4:null
+      },
+      {  
+        title:'Крупа перловая',
+        m1:230,
+        m2:25,
+        m3:8,
+        m4:null
+      },
+      {  
+        title:'Крупа ячневая',
+        m1:180,
+        m2:20,
+        m3:7,
+        m4:null
+      },
+      {  
+        title:'Крыжовник',
+        m1:210,
+        m2:null,
+        m3:null,
+        m4:null
+      },
+      {  
+        title:'Лавровый лист',
+        m1:null,
+        m2:null,
+        m3:null,
+        m4:0,2
+      },
+      {  
+        title:'Ликер',
+        m1:null,
+        m2:20,
+        m3:7,
+        m4:null
+      },
+      {  
+        title:'Лук репчатый средний',
+        m1:null,
+        m2:null,
+        m3:null,
+        m4:75
+      },
+      {  
+        title:'Мак',
+        m1:null,
+        m2:18,
+        m3:5,
+        m4:null
+      },
+      {  
+        title:'Малина',
+        m1:140,
+        m2:20,
+        m3:null,
+        m4:null
+      },
+      {  
+        title:'Маргарин топленый',
+        m1:230,
+        m2:14,
+        m3:10,
+        m4:null
+      },
+      {  
+        title:'Масло животное топленое',
+        m1:240,
+        m2:17,
+        m3:5,
+        m4:null
+      },
+      {  
+        title:'Масло растительное',
+        m1:240,
+        m2:20,
+        m3:5,
+        m4:null
+      },
+      {  
+        title:'Масло сливочное',
+        m1:240,
+        m2:40,
+        m3:15,
+        m4:null
+      },
+      {  
+        title:'Мёд',
+        m1:325,
+        m2:25,
+        m3:15,
+        m4:null
+      },
+      {  
+        title:'Миндаль очищенный',
+        m1:160,
+        m2:30,
+        m3:10,
+        m4:null
+      },
+      {  
+        title:'Молоко сгущеное',
+        m1:null,
+        m2:30,
+        m3:12,
+        m4:null
+      },
+      {  
+        title:'Молоко сухое',
+        m1:120,
+        m2:20,
+        m3:5,
+        m4:null
+      },
+      {  
+        title:'Молоко',
+        m1:250,
+        m2:20,
+        m3:5,
+        m4:null
+      },
+      {  
+        title:'Морковь',
+        m1:null,
+        m2:null,
+        m3:null,
+        m4:75
+      },
+      {  
+        title:'Мука картофельная',
+        m1:180,
+        m2:30,
+        m3:10,
+        m4:null
+      },
+      {  
+        title:'Мука кукрузная',
+        m1:160,
+        m2:30,
+        m3:10,
+        m4:null
+      },
+      {  
+        title:'Мука пшеничная',
+        m1:160,
+        m2:25,
+        m3:10,
+        m4:null
+      },
+      {  
+        title:'Огурец средний',
+        m1:null,
+        m2:null,
+        m3:null,
+        m4:100
+      },
+      {  
+        title:'Орех грецкий молотый',
+        m1:120,
+        m2:20,
+        m3:5,
+        m4:null
+      },
+      {  
+        title:'Орех фундук очищенный',
+        m1:170,
+        m2:30,
+        m3:10,
+        m4:null
+      },
+      {  
+        title:'Орех ядро',
+        m1:165,
+        m2:30,
+        m3:null,
+        m4:null
+      },
+      {  
+        title:'Перец горький',
+        m1:null,
+        m2:null,
+        m3:null,
+        m4:0.05
+      },
+      {  
+        title:'Перец душистый порошок',
+        m1:null,
+        m2:null,
+        m3:4.5,
+        m4:0.07
+      },
+      {  
+        title:'Перец молотый красный',
+        m1:null,
+        m2:null,
+        m3:1,
+        m4:null
+      },
+      {  
+        title:'Перец молотый черный',
+        m1:null,
+        m2:null,
+        m3:5,
+        m4:null
+      },
+      {  
+        title:'Перец черный горошек',
+        m1:null,
+        m2:null,
+        m3:0,
+        m4:0.03
+      },
+      {  
+        title:'Персик',
+        m1:null,
+        m2:null,
+        m3:null,
+        m4:85
+      },
+      {  
+        title:'Петрушка',
+        m1:null,
+        m2:null,
+        m3:null,
+        m4:50
+      },
+      {  
+        title:'Петрушка корень',
+        m1:null,
+        m2:null,
+        m3:null,
+        m4:150
+      },
+      {  
+        title:'Повидло',
+        m1:310,
+        m2:36,
+        m3:12,
+        m4:null
+      },
+      {  
+        title:'Помидор',
+        m1:null,
+        m2:null,
+        m3:null,
+        m4:75
+      },
+      {  
+        title:'Пшено',
+        m1:null,
+        m2:25,
+        m3:8,
+        m4:null
+      },
+      {  
+        title:'Пюре земляничное',
+        m1:350,
+        m2:50,
+        m3:17,
+        m4:null
+      },
+      {  
+        title:'Пюре ягодное',
+        m1:350,
+        m2:50,
+        m3:17,
+        m4:null
+      },
+      {  
+        title:'Редис',
+        m1:null,
+        m2:null,
+        m3:null,
+        m4:20
+      },
+      {  
+        title:'Редька',
+        m1:null,
+        m2:null,
+        m3:null,
+        m4:175
+      },
+      {  
+        title:'Репа',
+        m1:null,
+        m2:null,
+        m3:null,
+        m4:85
+      },
+      {  
+        title:'Рис',
+        m1:240,
+        m2:25,
+        m3:9,
+        m4:null
+      },
+      {  
+        title:'Сало',
+        m1:null,
+        m2:50,
+        m3:30,
+        m4:null
+      },
+      {  
+        title:'Сало топленое',
+        m1:245,
+        m2:20,
+        m3:null,
+        m4:null
+      },
+      {  
+        title:'Сахар кусковой',
+        m1:200,
+        m2:null,
+        m3:null,
+        m4:9
+      },
+      {  
+        title:'Сахарная пудра',
+        m1:180,
+        m2:25,
+        m3:8,
+        m4:null
+      },
+      {  
+        title:'Сахарный песок',
+        m1:230,
+        m2:30,
+        m3:12,
+        m4:null
+      },
+      {  
+        title:'Свекла',
+        m1:null,
+        m2:null,
+        m3:null,
+        m4:50
+      },
+      {  
+        title:'Сельдерей',
+        m1:null,
+        m2:null,
+        m3:null,
+        m4:100
+      },
+      {  
+        title:'Сельдерей корень',
+        m1:null,
+        m2:null,
+        m3:null,
+        m4:85
+      },
+      {  
+        title:'Слива',
+        m1:150,
+        m2:null,
+        m3:null,
+        m4:30
+      },
+      {  
+        title:'Сливки',
+        m1:250,
+        m2:14,
+        m3:5,
+        m4:null
+      },
+      {  
+        title:'Сметана',
+        m1:250,
+        m2:25,
+        m3:10,
+        m4:null
+      },
+      {  
+        title:'Смородина красная',
+        m1:175,
+        m2:35,
+        m3:null,
+        m4:null
+      },
+      {  
+        title:'Смородина черная',
+        m1:155,
+        m2:30,
+        m3:null,
+        m4:null
+      },
+      {  
+        title:'Сода питьевая',
+        m1:null,
+        m2:28,
+        m3:12,
+        m4:null
+      },
+      {  
+        title:'Сок',
+        m1:250,
+        m2:18,
+        m3:5,
+        m4:null
+      },
+      {  
+        title:'Соль',
+        m1:325,
+        m2:30,
+        m3:10,
+        m4:null
+      },
+      {  
+        title:'Сорго',
+        m1:180,
+        m2:20,
+        m3:7,
+        m4:null
+      },
+      {  
+        title:'Сухари',
+        m1:null,
+        m2:null,
+        m3:null,
+        m4:50
+      },
+      {  
+        title:'Сухари молотые',
+        m1:125,
+        m2:15,
+        m3:5,
+        m4:null
+      },
+      {  
+        title:'Сухари панировачные',
+        m1:125,
+        m2:20,
+        m3:5,
+        m4:null
+      },
+      {  
+        title:'Сыр кисломолочный',
+        m1:null,
+        m2:17,
+        m3:5,
+        m4:null
+      },
+      {  
+        title:'Толченые орехи',
+        m1:null,
+        m2:20,
+        m3:7,
+        m4:null
+      },
+      {  
+        title:'Томатное пюре',
+        m1:220,
+        m2:25,
+        m3:8,
+        m4:null
+      },
+      {  
+        title:'Томатный соус',
+        m1:null,
+        m2:25,
+        m3:8,
+        m4:null
+      },
+      {  
+        title:'Томатная паста',
+        m1:null,
+        m2:30,
+        m3:10,
+        m4:null
+      },
+      {  
+        title:'Уксус',
+        m1:250,
+        m2:18,
+        m3:5,
+        m4:null
+      },
+      {  
+        title:'Фасоль',
+        m1:null,
+        m2:30,
+        m3:10,
+        m4:null
+      },
+      {  
+        title:'Кукурузные Хлопья',
+        m1:50,
+        m2:17,
+        m3:2,
+        m4:null
+      },
+      {  
+        title:'Хлопья овсяные',
+        m1:100,
+        m2:14,
+        m3:4,
+        m4:null
+      },
+      {  
+        title:'Хлопья пшеничные',
+        m1:60,
+        m2:9,
+        m3:2,
+        m4:null
+      },
+      {  
+        title:'Цветная капуста средняя',
+        m1:null,
+        m2:null,
+        m3:null,
+        m4:750
+      },
+      {  
+        title:'Чай',
+        m1:null,
+        m2:15,
+        m3:4,
+        m4:null
+      },
+      {  
+        title:'Черешня',
+        m1:165,
+        m2:null,
+        m3:null,
+        m4:null
+      },
+      {  
+        title:'Черная смородина',
+        m1:180,
+        m2:30,
+        m3:null,
+        m4:null
+      },
+      {  
+        title:'Черника',
+        m1:200,
+        m2:35,
+        m3:null,
+        m4:null
+      },
+      {  
+        title:'Черника сушеная',
+        m1:null,
+        m2:15,
+        m3:null,
+        m4:null
+      },
+      {  
+        title:'Чернослив',
+        m1:250,
+        m2:25,
+        m3:null,
+        m4:null
+      },
+      {  
+        title:'Чечевица',
+        m1:210,
+        m2:null,
+        m3:null,
+        m4:null
+      },
+      {  
+        title:'Яблоко',
+        m1:null,
+        m2:null,
+        m3:null,
+        m4:90
+      },
+      {  
+        title:'Яблоко сушеное',
+        m1:70,
+        m2:null,
+        m3:null,
+        m4:null
+      },
+      {  
+        title:'Белок',
+        m1:null,
+        m2:null,
+        m3:null,
+        m4:30
+      },
+      {  
+        title:'Желток',
+        m1:null,
+        m2:null,
+        m3:null,
+        m4:20
+      },
+      {  
+        title:'Яйцо',
+        m1:null,
+        m2:null,
+        m3:null,
+        m4:50
+      },
+      {  
+        title:'Яичный порошок',
+        m1:180,
+        m2:25,
+        m3:10,
+        m4:null
+      }
+    ]
   }
 
 
