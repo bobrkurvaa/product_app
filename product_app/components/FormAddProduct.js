@@ -1,15 +1,17 @@
 import { useState, useRef } from 'react';
 import { StyleSheet, View, TextInput, Text, Pressable, FlatList, Image, ImageBackground } from 'react-native';
+import { Dropdown } from 'react-native-element-dropdown';
 
 export default function FormAddProduct({ navigation }) {  
     const [products, setProduct] = useState([]);
 
     const [productTitle, setProductTitle] = useState('');
     const [productWeight, setProductWeight] = useState('');
+    const [productMeasure, setProductMeasure] = useState('');
 
     const product_title_input = useRef(null);
     const product_weight_input = useRef(null);
-    
+
     const addProductTitle = (productTitle) => {
         setProductTitle(productTitle);
     }
@@ -27,7 +29,8 @@ export default function FormAddProduct({ navigation }) {
                 {
                     key: 'product_' + new Date().getTime(),
                     title: productTitle,
-                    weight: productWeight
+                    weight: productWeight,
+                    measure: productMeasure
                 },
                 ...list
             ];       
@@ -62,7 +65,25 @@ export default function FormAddProduct({ navigation }) {
                         ref={product_weight_input}
                         onChangeText={addProductWeight}
                         keyboardType={'numeric'}
-                        placeholder='Вес (грамм)' 
+                        placeholder='Объем' 
+                    />
+                    <Dropdown style={styles.form_add_product_measure_input}
+                        data={[
+                            {
+                                label: 'грамм',
+                                value: 'гр.'
+                            },
+                            {
+                                label: 'штук',
+                                value: 'шт.'
+                            },
+                        ]}
+                        labelField="label"
+                        valueField="value"
+                        placeholder="Мера"
+                        onChange={(item) => {
+                            setProductMeasure(item.value)
+                        }}
                     />
                 </View>
                 <Pressable 
@@ -73,15 +94,15 @@ export default function FormAddProduct({ navigation }) {
                 </Pressable>
             </View>
             <View style={styles.list_products_container}>
-                {/* {products.length == 0 && (
-                    <ImageBackground source={require('./../assets/fridge-image.png')} resizeMode="contain" style={styles.list_products_fridge_image}/>
-                )} */}
+                {products.length == 0 && (
+                    <Text style={styles.form_add_product_list_text}>Список продуктов пуст</Text>
+                )}
                 <FlatList 
                     style={styles.list_products}
                     data={products} renderItem={({item}) => (
                     <View style={styles.list_products_item}>
                         <Text style={styles.list_products_item_title}>{item.title}</Text>
-                        <Text style={styles.list_products_item_weight}>{item.weight} гр.</Text>
+                        <Text style={styles.list_products_item_weight}>{item.weight} {item.measure}</Text>
                         <Pressable 
                             style={styles.remove_product_btn} 
                             onPress={()=>removeProductHandler(item.key)}
@@ -118,7 +139,7 @@ const styles = StyleSheet.create({
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-between',
-        height: 182,
+        height: 242,
     },
     form_add_product_head_text: {
         color: '#151515',
@@ -130,10 +151,12 @@ const styles = StyleSheet.create({
     form_add_product_fields_container: {
         display: 'flex',
         flexDirection: 'row',
-        justifyContent: 'space-between'
+        flexWrap: 'wrap',
+        justifyContent: 'space-between',
     },
     form_add_product_title_input: {
-        width: '59%',
+        width: '100%',
+        marginBottom: 8,
         paddingHorizontal: 16,
         paddingVertical: 14,
         backgroundColor: '#FFFFFF',
@@ -143,7 +166,17 @@ const styles = StyleSheet.create({
         fontSize: 16
     },
     form_add_product_weight_input: {
-        width: '39%',
+        width: '69%',
+        paddingHorizontal: 16,
+        paddingVertical: 14,
+        backgroundColor: '#FFFFFF',
+        borderWidth: 1,
+        borderRadius: 18,
+        borderColor: '#FCBA26',
+        fontSize: 16
+    },
+    form_add_product_measure_input: {
+        width: '29%',
         paddingHorizontal: 16,
         paddingVertical: 14,
         backgroundColor: '#FFFFFF',
@@ -167,6 +200,14 @@ const styles = StyleSheet.create({
     list_products_container: {
         marginVertical: 14,
         flex: 1,
+    },
+    form_add_product_list_text: {
+        marginTop: 28,
+        color: '#151515',
+        fontSize: 20,
+        lineHeight: 24,
+        fontWeight: '500',
+        textAlign: 'center'
     },
     list_products_fridge_image: {
         display: 'flex',

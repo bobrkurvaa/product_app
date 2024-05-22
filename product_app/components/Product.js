@@ -4,7 +4,8 @@ import { WebView } from 'react-native-webview';
 export default function Product({ route }) {
     return (
         <View style={{
-            flex: 1
+            flex: 1,
+            marginBottom: '9%',
         }}>
         <WebView 
             source={{
@@ -16,7 +17,8 @@ export default function Product({ route }) {
             startInLoadingState={true}
             originWhitelist={['*']}
             style= {{
-                height: 800
+                marginBottom: '9%',
+                backgroundColor: '#FFFFFF',
             }}
         />
       </View>
