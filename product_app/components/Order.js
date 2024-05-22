@@ -1,21 +1,31 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { StyleSheet, View, ScrollView, Text, Image, TouchableOpacity } from 'react-native';
 
 export default function Order({ navigation, route }) {
     const [products, setProducts] = useState([]);
-    const [products_array, setProductsArray] = useState([]);
+    const [fetchedState,setFetchedState]=useState(null);
 
-    route.params.products.forEach(async (product, key) => {
-        await fetch(
-            'https://sbermarket.ru/api/v2/products?q=' + encodeURI(product.title) + '&sid=' + route.params.store 
-        ).then(async(response) => {
-            return await response.json();
-        }).then(async(response) => {
+
+    
+    useEffect(() => {
+        route.params.products.forEach(async(product, key) => {
+            await getProducts(product, key)
+        });
+    },[])
+
+
+
+    const getProducts = async(product, key) =>{
+        try{
+            const response = await fetch('https://sbermarket.ru/api/v2/products?q=' + encodeURI(product.title) + '&sid=' + route.params.store)
+            const response_data = await response.json();
             let variations = [];
 
-            response.products.forEach(item => {
+            for (let i = 0; i < response_data.products.length; i++) {
+                let item = response_data.products[i];
+
                 variations.push({
-                    key: variations.length,
+                    key: 'variation_' + key + '_' + products.length + '_' + variations.length,
                     id: item.id,
                     name: item.name,
                     image: item.images[0].small_url,
@@ -24,29 +34,30 @@ export default function Order({ navigation, route }) {
                     volume: item.volume,
                     volume_type: item.type
                 })
-            })
-
-            return await variations;
-        }).then(async (variations) => {
-            await setProductsArray((list) => {
+            }
+        
+            setProducts((list) => {
                 return [
                     {
-                        key: list.length,
+                        key: 'product_' + key + '_' + products.length,
                         search_product: product.title,
                         product_variations: variations
                     },
                     ...list
                 ]
-            })
+            });
+        }
+        catch(error){
+          console.log(error)
+        }
+        finally{
+            setFetchedState(null);
+        }
+    }
 
-            if (products_array.length == route.params.products.length) {
-                await setProducts(products_array);
-            }
-        });
-    });
+    
 
     const addProduct = (product) => {
-        console.log(product);
         fetch(
             'https://sbermarket.ru/api/v2/products/' + product
         ).then(async(response) => {
@@ -55,7 +66,7 @@ export default function Order({ navigation, route }) {
             navigation.navigate(
                 'Product', 
                 { 
-                    uri: 'metro/' + response.product.slug
+                    uri: route.params.store_slug + '/' + response.product.slug
                 }
             )
         });
@@ -77,7 +88,10 @@ export default function Order({ navigation, route }) {
         )}
         <View style={styles.order_products_container}>
             {products.map((item) =>
-                <View style={styles.order_product} >
+                <View 
+                    style={styles.order_product}  
+                    key={item.key}
+                >
                     <Text style={styles.order_product_title}>{item.search_product}</Text>
                     {item.product_variations.length == 0 && (
                         <Text style={styles.order_product_variation_not_found_text}>Продукты не найдены</Text>
@@ -90,6 +104,7 @@ export default function Order({ navigation, route }) {
                         {item.product_variations.map((product_variation) =>
                             <TouchableOpacity  
                                 style={styles.order_product_variation}
+                                key={product_variation.key}
                                 onPress={()=>addProduct(product_variation.id)}
                             >
                                 <Image 
@@ -128,6 +143,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         height: '100%',
         paddingHorizontal: 18,
+        paddingTop: 286,
         backgroundColor: '#FFFFFF'     
     },
     order_preloader_text: {

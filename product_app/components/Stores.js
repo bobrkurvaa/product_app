@@ -23,6 +23,7 @@ export default function Stores({ navigation }) {
                         key: stores_data.length,
                         id: store.id,
                         name: store.retailer.name,
+                        slug: store.retailer.slug,
                         logo: store.retailer.logo,
                         logo_background_color: store.retailer.logo_background_color,
                         delivery_text: store.next_delivery == null ? 'время не указано' : store.next_delivery.summary,
@@ -37,18 +38,18 @@ export default function Stores({ navigation }) {
         await setStores(stores);
     });
 
-    const createOrder = (store) => {
+    const createOrder = (store, store_slug) => {
         let products = [
             {
-                key: 1,
+                key: '1',
                 title: 'Сыр Камамбер'
             },
             {
-                key: 2,
+                key: '2',
                 title: 'Колбаса'
             },
             {
-                key: 3,
+                key: '3',
                 title: 'Огурец'
             }
         ] 
@@ -56,6 +57,7 @@ export default function Stores({ navigation }) {
             'Order', 
             { 
                 store: store,
+                store_slug: store_slug,
                 products: products
             }
         );
@@ -95,7 +97,7 @@ export default function Stores({ navigation }) {
                         <Text style={styles.store_order_amount}>Заказ от {item.order_amount}₽</Text>
                         <Pressable 
                               style={styles.btn_select_store}
-                              onPress={()=>createOrder(item.id)}
+                              onPress={()=>createOrder(item.id, item.slug)}
                             >
                               <Text style={styles.btn_select_store_text}>Выбрать</Text>
                         </Pressable>

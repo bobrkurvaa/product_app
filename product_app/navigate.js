@@ -117,7 +117,7 @@ export default function Navigate() {
                                 component={Order} 
                                 options={
                                     {
-                                        title: 'Создание заказа',
+                                        title: 'Выбор продуктов',
                                     }
                                 }
                             />
