@@ -34,6 +34,8 @@ export default function Recipes({ navigation, route }) {
     }*/
   ]);
 
+  const [loadRecipes, setLoadResipes] = useState(false)
+
   let search_products = [];
 
   route.params.products.forEach(product => {
@@ -147,13 +149,14 @@ export default function Recipes({ navigation, route }) {
     return recipes;
   }).then(async(recipes) => {
     await setRecipes(recipes)
+    await setLoadResipes(true)
   })
 
   
 
   return (
     <View style={styles.recipes_container}>
-      {recipes.length == 0 && (
+      {!loadRecipes && recipes.length == 0 && (
         <View style={styles.recipes_preloader_container}>
            <Text style={styles.recipes_preloader_text}>Уже ищем рецепты, которые вам подойдут...</Text>
            <Image 
@@ -161,6 +164,9 @@ export default function Recipes({ navigation, route }) {
               source={require('./../assets/preloader.gif')}
             />
         </View>
+      )}
+      {loadRecipes && recipes.length == 0 && (
+        <Text style={styles.recipes_not_found_text}>Рецепты не найдены</Text>
       )}
       <FlatList style={styles.recipes} data={recipes} renderItem={({ item }) => (
         <View style={styles.recipe}>
@@ -238,6 +244,13 @@ export default function Recipes({ navigation, route }) {
     recipes_preloader_animate: {
       width: 52,
       height: 52
+    },
+    recipes_not_found_text: {
+      width: '100%',
+      marginVertical: 30,
+      fontSize: 18,
+      fontWeight: '500',
+      textAlign: 'center'
     },
     recipes: {
       overflow: 'scroll',

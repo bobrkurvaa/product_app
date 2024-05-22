@@ -41,11 +41,11 @@ export default function Whishlist() {
           source={{
             uri: 'https://sbermarket.ru/metro/podsolnechnoe-maslo-sloboda-rafinirovannoe-1-l-00d9b41'
           }}
-                scalesPageToFit={false}
-                javaScriptEnabled={true}
-                bounces={false}
-                startInLoadingState={true}
-                originWhitelist={['*']}
+          scalesPageToFit={false}
+          javaScriptEnabled={true}
+          bounces={false}
+          startInLoadingState={true}
+          originWhitelist={['*']}
           style= {{
             height: 800
           }}
