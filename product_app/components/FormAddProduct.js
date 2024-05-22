@@ -85,7 +85,11 @@ export default function FormAddProduct({ navigation }) {
                         data={[
                             {
                                 label: 'грамм',
-                                value: 'гр.'
+                                value: 'г'
+                            },
+                            {
+                                label: 'миллилитров',
+                                value: 'мл'
                             },
                             {
                                 label: 'штук',
@@ -180,7 +184,7 @@ const styles = StyleSheet.create({
         fontSize: 16
     },
     form_add_product_weight_input: {
-        width: '69%',
+        width: '59%',
         paddingHorizontal: 16,
         paddingVertical: 14,
         backgroundColor: '#FFFFFF',
@@ -190,7 +194,7 @@ const styles = StyleSheet.create({
         fontSize: 16
     },
     form_add_product_measure_input: {
-        width: '29%',
+        width: '39%',
         paddingHorizontal: 16,
         paddingVertical: 14,
         backgroundColor: '#FFFFFF',

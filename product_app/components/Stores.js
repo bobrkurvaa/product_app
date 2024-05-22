@@ -9,7 +9,7 @@ export default function Stores({ navigation, route }) {
 
     const [stores, setStores] = useState([]);
 
-
+    
     
     fetch(
         'https://sbermarket.ru/api/v2/multisearches?q=' + encodeURI(route.params.products[0].title) + '&lat=' + position.latitude + '&lon=' + position.longitude + '&include%5B%5D=retailer&include%5B%5D=closest_shipping_options'
