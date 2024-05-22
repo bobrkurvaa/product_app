@@ -81,7 +81,9 @@ export default function Recipes({ navigation, route }) {
               }
             } else {
               if (weight > 0) {
-
+                if (convertWeight(item.title, weight, measure) <= item.weight) {
+                  in_stock = true;
+                }
               } else {
                 in_stock = true;
               }
@@ -143,7 +145,7 @@ export default function Recipes({ navigation, route }) {
 
 
   
-  const convertWeight = (product, measure) => {
+  const convertWeight = (product, weight, measure) => {
     let measuresArray = [   
       {  
         title:'Абрикос',
@@ -444,7 +446,7 @@ export default function Recipes({ navigation, route }) {
         m1:null,
         m2:null,
         m3:null,
-        m4:0,2
+        m4:0.2
       },
       {  
         title:'Ликер',
@@ -1021,6 +1023,36 @@ export default function Recipes({ navigation, route }) {
         m4:null
       }
     ]
+
+    measuresArray.forEach((item) => {
+      if (item.title.toLowerCase().includes(product.toLowerCase())) {
+        switch (measure) {
+          case 'стакан':
+          case 'стакана':
+            return m1 * parseFloat(weight);
+            break;
+          case 'ст.л.':
+          case 'ст. л.':
+            return m2 * parseFloat(weight);
+            break;
+          case 'ч.л.':
+          case 'ч. л.':
+            return m3 * parseFloat(weight);
+            break;
+          case 'шт.':
+            return m4 * parseFloat(weight);
+            break;
+          case 'г':
+          case 'гр':
+            return parseFloat(weight);
+            break;
+          default:
+            return 0;
+        }
+      }
+    })
+
+    return 0;
   }
 
 
