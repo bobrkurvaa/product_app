@@ -21,8 +21,14 @@ export default function Recipe({ navigation, route }) {
         //AsyncStorage.setItem('whishlist', JSON.stringify({title:[], uri:[]}))
         const asyncStorageRes = await AsyncStorage.getItem('whishlist');
         const whishlist = await JSON.parse(asyncStorageRes);
-        let whishlist_uri = whishlist.uri;
-        let whishlist_title = whishlist.title;
+        if (whishlist = {}) {
+            let whishlist_uri = [];
+            let whishlist_title = [];
+        } else {
+            let whishlist_uri = whishlist.uri;
+            let whishlist_title = whishlist.title;
+        }
+        
 
         if (whishlist_uri.indexOf(uri) == -1) {
             whishlist_uri.push(uri);
