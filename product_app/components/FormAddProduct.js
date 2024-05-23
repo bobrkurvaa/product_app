@@ -157,7 +157,7 @@ const styles = StyleSheet.create({
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-between',
-        height: 252,
+        height: 258,
     },
     form_add_product_head_text: {
         color: '#151515',
