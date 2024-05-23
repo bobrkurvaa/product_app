@@ -40,7 +40,7 @@ const setScreenOptions = (route) => {
                             source={require('./assets/home_btn-icon.png')}
                         />
                     );
-                case 'Избранное':
+                case 'Whishlist':
                     return (
                         <Image 
                             style={styles.btn_image}
@@ -134,9 +134,27 @@ export default function Navigate() {
                     )}
                 </Tab.Screen>
                 <Tab.Screen 
-                    name="Избранное" 
-                    component={Whishlist} 
-                />
+                    name="Whishlist" 
+                    options={
+                        {
+                            title: 'Избранное',
+                        }
+                    }
+                >
+                    {() => (
+                        <Stack.Navigator>
+                            <Stack.Screen 
+                                name="WhishlistStack" 
+                                component={Whishlist}
+                                options={
+                                    {
+                                        title: 'Избранное',
+                                    }
+                                }
+                            />
+                        </Stack.Navigator>
+                    )}
+                </Tab.Screen>
                 <Tab.Screen 
                     name="Профиль" 
                     component={Stores} 

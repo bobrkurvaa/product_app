@@ -1,6 +1,56 @@
 import { StyleSheet, ScrollView, View, Text, Image, Pressable} from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, { useState } from 'react';
 
 export default function Recipe({ navigation, route }) {
+    const [inWhishlist, setToWhishlist] = useState(false);
+
+    const checkWhishlist = async () => {
+        const asyncStorageRes = await AsyncStorage.getItem('whishlist');
+        const whishlist = await JSON.parse(asyncStorageRes);
+        let whishlist_uri = whishlist.uri;
+
+        if (whishlist_uri.indexOf(route.params.url) != -1) {
+            setToWhishlist(true);
+        } else {
+            setToWhishlist(false)
+        }   
+    }
+
+    const addToWhishlist = async (title, uri) => {
+        //AsyncStorage.setItem('whishlist', JSON.stringify({title:[], uri:[]}))
+        const asyncStorageRes = await AsyncStorage.getItem('whishlist');
+        const whishlist = await JSON.parse(asyncStorageRes);
+        let whishlist_uri = whishlist.uri;
+        let whishlist_title = whishlist.title;
+
+        if (whishlist_uri.indexOf(uri) == -1) {
+            whishlist_uri.push(uri);
+            whishlist_title.push(title);
+            await AsyncStorage.setItem('whishlist', JSON.stringify({title: whishlist_title, uri: whishlist_uri}));
+            checkWhishlist();
+        }
+    }
+
+    const removeWhishlist = async(uri) => {
+        const asyncStorageRes = await AsyncStorage.getItem('whishlist');
+        const whishlist = await JSON.parse(asyncStorageRes);
+        let whishlist_uri = whishlist.uri;
+        let whishlist_title = whishlist.title;
+
+        if (whishlist_uri.indexOf(uri) != -1) {
+            let index = whishlist_uri.indexOf(uri);
+
+            whishlist_uri.splice(index, 1);
+            whishlist_title.splice(index, 1);
+
+            await AsyncStorage.setItem('whishlist', JSON.stringify({title: whishlist_title, uri: whishlist_uri}));
+            checkWhishlist();
+        }
+    }
+
+    checkWhishlist();
+
     return (
         <ScrollView style={styles.recipe_container}>
             <Image 
@@ -10,6 +60,22 @@ export default function Recipe({ navigation, route }) {
                 }}
             />
             <Text style={styles.recipe_title}>{route.params.data.title}</Text>
+            {!inWhishlist && (
+                <Pressable 
+                    style={styles.btn_add_to_whishlist}
+                    onPress={() => addToWhishlist(route.params.data.title, route.params.url)}
+                >
+                    <Text style={styles.btn_add_to_whishlist_text}>В избранное</Text>
+                </Pressable>
+            )}
+             {inWhishlist && (
+                <Pressable 
+                    style={styles.btn_remove_from_whishlist}
+                    onPress={() => removeWhishlist(route.params.url)}
+                >
+                    <Text style={styles.btn_remove_from_whishlist_text}>Убрать из избранного</Text>
+                </Pressable>
+             )}
             <View style={styles.recipe_products}>
                 <Text style={styles.recipe_products_head}>Ингредиенты</Text>
                 {route.params.data.products.map((item) =>
@@ -71,6 +137,30 @@ const styles = StyleSheet.create({
         fontSize: 24,
         fontWeight: '700',
         marginVertical: 28
+    },
+    btn_add_to_whishlist: {
+        width: 200,
+        paddingHorizontal: 14,
+        paddingVertical: 16,
+        backgroundColor: '#d2d2d2',
+        borderRadius: 14,
+        marginBottom: 24
+    },
+    btn_add_to_whishlist_text: {
+        fontSize: 16,
+        textAlign: 'center'
+    },
+    btn_remove_from_whishlist: {
+        width: 200,
+        paddingHorizontal: 14,
+        paddingVertical: 16,
+        backgroundColor: '#f45db7',
+        borderRadius: 14,
+        marginBottom: 24
+    },
+    btn_remove_from_whishlist_text: {
+        fontSize: 16,
+        textAlign: 'center'
     },
     recipe_products: {
         display: 'flex',
