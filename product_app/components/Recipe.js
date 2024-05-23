@@ -8,27 +8,32 @@ export default function Recipe({ navigation, route }) {
     const checkWhishlist = async () => {
         const asyncStorageRes = await AsyncStorage.getItem('whishlist');
         const whishlist = await JSON.parse(asyncStorageRes);
-        let whishlist_uri = whishlist.uri;
 
-        if (whishlist_uri.indexOf(route.params.url) != -1) {
-            setToWhishlist(true);
-        } else {
-            setToWhishlist(false)
-        }   
+        if (whishlist != null) {
+            let whishlist_uri = whishlist.uri;
+
+            if (whishlist_uri.indexOf(route.params.url) != -1) {
+                setToWhishlist(true);
+            } else {
+                setToWhishlist(false)
+            }   
+        }
     }
 
     const addToWhishlist = async (title, uri) => {
         //AsyncStorage.setItem('whishlist', JSON.stringify({title:[], uri:[]}))
         const asyncStorageRes = await AsyncStorage.getItem('whishlist');
         const whishlist = await JSON.parse(asyncStorageRes);
-        if (whishlist = {}) {
-            let whishlist_uri = [];
-            let whishlist_title = [];
-        } else {
-            let whishlist_uri = whishlist.uri;
-            let whishlist_title = whishlist.title;
-        }
+        let whishlist_uri;
+        let whishlist_title;
         
+        if (whishlist == null) {
+            whishlist_uri = [];
+            whishlist_title = [];
+        } else {
+            whishlist_uri = whishlist.uri;
+            whishlist_title = whishlist.title;
+        }      
 
         if (whishlist_uri.indexOf(uri) == -1) {
             whishlist_uri.push(uri);
