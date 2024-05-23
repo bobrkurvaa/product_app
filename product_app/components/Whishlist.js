@@ -141,7 +141,13 @@ export default function Whishlist({ navigation }) {
   }
 
   const showRecipe = async (url) => {
-    navigation.navigate('Recipe', {data: await getRecipe(url, [])});
+    navigation.navigate(
+      'Recipe', 
+      {
+        url: url,
+        data: await getRecipe(url, [])
+      }
+    );
   }
 
   return (

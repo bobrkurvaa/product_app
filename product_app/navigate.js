@@ -47,7 +47,7 @@ const setScreenOptions = (route) => {
                             source={require('./assets/whishlist_btn-icon.png')}
                         />
                     );
-                case 'Профиль':
+                case 'Profile':
                     return (
                         <Image 
                             style={styles.btn_image}
@@ -156,9 +156,27 @@ export default function Navigate() {
                     )}
                 </Tab.Screen>
                 <Tab.Screen 
-                    name="Профиль" 
-                    component={Stores} 
-                />
+                    name="Profile" 
+                    options={
+                        {
+                            title: 'Приложение',
+                        }
+                    }
+                >
+                    {() => (
+                        <Stack.Navigator>
+                            <Stack.Screen 
+                                name="ProfileStack" 
+                                component={Profile}
+                                options={
+                                    {
+                                        title: 'Приложение',
+                                    }
+                                }
+                            />
+                        </Stack.Navigator>
+                    )}
+                </Tab.Screen>
             </Tab.Navigator>
         </NavigationContainer>
     );
