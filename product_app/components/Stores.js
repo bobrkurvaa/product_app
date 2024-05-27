@@ -9,11 +9,28 @@ export default function Stores({ navigation, route }) {
 
     const [stores, setStores] = useState([]);
     const [loadStores, setLoadStores] = useState(false);
+    const [existProducts, setExistProducts] = useState(true);
 
     useEffect(() => {
-        //setLoadStores(true);
         getStores(route.params.products);
     },[])
+
+    const getProducts = async(store, product) =>{
+        try{
+            const response = await fetch('https://sbermarket.ru/api/v2/products?q=' + encodeURI(product) + '&sid=' + store)
+            const response_data = await response.json();
+
+            if (response_data.products.length > 0) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+        catch(error){
+          console.log(error)
+          return false;
+        }
+    }
 
     const getStores = async() => {
         let stores_list = [];
@@ -21,24 +38,37 @@ export default function Stores({ navigation, route }) {
             const response = await fetch('https://sbermarket.ru/api/v2/multisearches?q=' + encodeURI(route.params.products[0].title) + '&lat=' + position.latitude + '&lon=' + position.longitude + '&include%5B%5D=retailer&include%5B%5D=closest_shipping_options')
             const data = await response.json();
 
-            console.log('https://sbermarket.ru/api/v2/multisearches?q=' + encodeURI(route.params.products[0].title) + '&lat=' + position.latitude + '&lon=' + position.longitude + '&include%5B%5D=retailer&include%5B%5D=closest_shipping_options');
+            for(let i = 0; i < data.stores.length; i++) {
+                let store = data.stores[i];
 
-            data.stores.forEach(store => {
                 if (store.vertical == 'grocery') {
-                    stores_list.push(
-                        {
-                            key: stores_list.length,
-                            id: store.id,
-                            name: store.retailer.name,
-                            slug: store.retailer.slug,
-                            logo: store.retailer.logo,
-                            logo_background_color: store.retailer.logo_background_color,
-                            delivery_text: store.next_delivery == null ? 'время не указано' : store.next_delivery.summary,
-                            order_amount: store.min_order_amount
-                        }    
-                    )
+                    var exist_products = true;
+
+                    for(let j = 0; j < route.params.products.length; j++) {
+                        let product = route.params.products[j];
+                        exist_products = await getProducts(store.id, product.title);
+
+                        if (!exist_products) {
+                            break;
+                        }
+                    }
+
+                    if (exist_products) {
+                        stores_list.push(
+                            {
+                                key: stores_list.length,
+                                id: store.id,
+                                name: store.retailer.name,
+                                slug: store.retailer.slug,
+                                logo: store.retailer.logo,
+                                logo_background_color: store.retailer.logo_background_color,
+                                delivery_text: store.next_delivery == null ? 'время не указано' : store.next_delivery.summary,
+                                order_amount: store.min_order_amount
+                            }    
+                        )
+                    }
                 }
-            });   
+            };   
         } catch(error) {
             console.log(error)
         } finally {
