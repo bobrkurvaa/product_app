@@ -261,3 +261,32 @@ fetch(
     </View>
   )} />
 )}
+
+fetch(
+  'https://sbermarket.ru/api/v2/multisearches?q=' + encodeURI(route.params.products[0].title) + '&lat=' + position.latitude + '&lon=' + position.longitude + '&include%5B%5D=retailer&include%5B%5D=closest_shipping_options'
+).then(async(response) => {
+  return await response.json();
+}).then(response => {
+  let stores_data = [];
+
+  response.stores.forEach(store => {
+      if (store.vertical == 'grocery') {
+          stores_data.push(
+              {
+                  key: stores_data.length,
+                  id: store.id,
+                  name: store.retailer.name,
+                  slug: store.retailer.slug,
+                  logo: store.retailer.logo,
+                  logo_background_color: store.retailer.logo_background_color,
+                  delivery_text: store.next_delivery == null ? 'время не указано' : store.next_delivery.summary,
+                  order_amount: store.min_order_amount
+              }    
+          )
+      }
+  });
+  
+  return stores_data;
+}).then(async(stores) => {
+  await setStores(stores);
+});
