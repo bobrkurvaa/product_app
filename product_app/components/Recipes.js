@@ -1029,19 +1029,27 @@ export default function Recipes({ navigation, route }) {
         switch (measure) {
           case 'стакан':
           case 'стакана':
-            return m1 * parseFloat(weight);
-            break;
+            if (item.m1 != null) {
+              return item.m1 * parseFloat(weight);
+              break;
+            }
           case 'ст.л.':
           case 'ст. л.':
-            return m2 * parseFloat(weight);
-            break;
+            if (item.m2 != null) {
+              return item.m2 * parseFloat(weight);
+              break;
+            }
           case 'ч.л.':
           case 'ч. л.':
-            return m3 * parseFloat(weight);
-            break;
+            if (item.m3 != null) {
+              return item.m3 * parseFloat(weight);
+              break;
+            }
           case 'шт.':
-            return m4 * parseFloat(weight);
-            break;
+            if (item.m4 != null) {
+              return item.m4 * parseFloat(weight);
+              break;
+            }
           case 'г':
           case 'гр':
             return parseFloat(weight);
